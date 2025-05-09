@@ -1,12 +1,12 @@
 ---
 lab:
-  title: Desenvolver agentes de IA do Azure com o SDK do Kernel Semântico
-  description: Saiba como usar o SDK do Kernel Semântico para criar e usar um agente do Serviço do Agente de IA do Azure.
+  title: Desenvolva agentes de IA usando o Azure OpenAI e o SDK do Kernel Semântico
+  description: Saiba como usar o SDK do Kernel Semântico para criar e usar um agente de Serviço do Agente de IA do Azure.
 ---
 
-# Desenvolver agentes de IA do Azure com o SDK do Kernel Semântico
+# Desenvolva agentes de IA usando o Azure OpenAI e o SDK do Kernel Semântico
 
-Neste exercício, você usará o Serviço de Agente de IA do Azure e o Kernel Semântico para criar um agente de IA que processa solicitações de despesas.
+Neste exercício, você usará o Serviço de Agente de IA do Azure e o Kernel Semântico para criar um agente de IA que cria um email de relatório de despesas.
 
 Este exercício deve levar aproximadamente **30** minutos para ser concluído.
 
@@ -26,7 +26,7 @@ Vamos começar criando um projeto da Fábrica de IA do Azure.
     - **Nome do hub**: *um nome válido para o seu hub*
     - **Assinatura**: *sua assinatura do Azure*
     - **Grupo de recursos**: *criar ou selecionar um grupo de recursos*
-    - **Local**: selecione uma das seguintes regiões\*:
+    - **Localização**: selecione uma das seguintes regiões\*:
         - eastus
         - eastus2
         - swedencentral
@@ -35,7 +35,7 @@ Vamos começar criando um projeto da Fábrica de IA do Azure.
     - **Conectar os Serviços de IA do Azure ou o OpenAI do Azure**: *Criar um novo recurso de Serviços de IA*
     - **Conectar-se à Pesquisa de IA do Azure**: Ignorar a conexão
 
-    > \* No momento da redação deste artigo, essas regiões são compatíveis com o modelo gpt-4o para uso em agentes. A disponibilidade do modelo é limitada por cotas regionais. No caso de um limite de cota ser atingido mais adiante no exercício, há a possibilidade de você precisar criar outro projeto em uma região diferente.
+    > \* No momento da redação deste artigo, essas regiões dão suporte ao modelo gpt-4o para uso em agentes. A disponibilidade do modelo é limitada por cotas regionais. No caso de um limite de cota ser atingido mais adiante no exercício, há a possibilidade de você precisar criar outro projeto em uma região diferente.
 
 1. Clique em **Avançar** e revise a configuração. Em seguida, selecione **Criar** e aguarde a conclusão do processo.
 1. Quando o projeto for criado, feche todas as dicas exibidas e examine a página do projeto no Portal da Fábrica de IA do Azure, que deve ser semelhante à imagem a seguir:
@@ -44,7 +44,7 @@ Vamos começar criando um projeto da Fábrica de IA do Azure.
 
 ## Implantar um modelo de IA generativa
 
-Agora está tudo pronto para implantar um modelo de linguagem de IA generativa para dar suporte ao agente.
+Agora você está pronto para implantar um modelo de linguagem de IA generativo para dar suporte ao seu agente.
 
 1. No painel à esquerda do seu projeto, na seção **Meus ativos**, selecione a página **Modelos + pontos de extremidade**.
 1. Na página **Modelos + pontos extremidades**, na guia **Implantações de modelo**, no menu **+ Implantar modelo**, selecione **Implantar modelo base**.
@@ -64,7 +64,7 @@ Agora está tudo pronto para implantar um modelo de linguagem de IA generativa p
 
 ## Criar um aplicativo cliente do agente
 
-Agora você já pode criar um aplicativo cliente que define um agente e uma função personalizada. Você encontra alguns códigos em um repositório GitHub.
+Agora você está pronto para criar um aplicativo cliente que define um agente e uma função personalizada. Alguns códigos foram fornecidos para você em um repositório do GitHub.
 
 ### Preparar o ambiente
 
@@ -91,14 +91,14 @@ Agora você já pode criar um aplicativo cliente que define um agente e uma fun�
 
     > **Dica**: ao inserir comandos no Cloud Shell, a saída poderá ocupar uma grande quantidade do buffer da tela e o cursor na linha atual pode ficar obscurecido. Você pode limpar a tela digitando o comando `cls` para facilitar o foco em cada tarefa.
 
-1. Quando o repositório tiver sido clonado, insira o comando a seguir para alterar o diretório de trabalho para a pasta que contém os arquivos de código e listar todos eles.
+1. Quando o repositório tiver sido clonado, digite o seguinte comando para alterar o diretório de trabalho para a pasta que contém os arquivos de código e relacione todos eles.
 
     ```
    cd ai-agents/Labfiles/04-semantic-kernel/python
    ls -a -l
     ```
 
-    Os arquivos fornecidos incluem código do aplicativo, um arquivo para definições de configuração e um arquivo que contém dados de despesas.
+    Os arquivos fornecidos incluem o código do aplicativo e um arquivo para definições de configuração.
 
 ### Definir as configurações do aplicativo
 
@@ -120,26 +120,26 @@ Agora você já pode criar um aplicativo cliente que define um agente e uma fun�
 
     O arquivo é aberto em um editor de código.
 
-1. No arquivo de código, substitua o espaço reservado **your_project_connection_string** pela cadeia de conexão do seu projeto (copiada da página **Visão Geral** do projeto no portal da Fábrica de IA do Azure), e o espaço reservado **your_model_deployment** pelo nome que você atribuiu à implantação do seu modelo gpt-4o.
+1. No arquivo de código, substitua o espaço reservado **your_project_connection_string** pela cadeia de conexão do seu projeto (copiada da página **Visão Geral** do projeto no portal da Fábrica de IA do Azure), e o espaço reservado **your_model_deployment** pelo nome que você atribuiu à implantação do seu modelo gpt-4.
 1. Depois de substituir os espaços reservados, use o comando **CTRL+S** para salvar suas alterações e, em seguida, use o comando **CTRL+Q** para fechar o editor de código, mantendo a linha de comando do Cloud Shell aberta.
 
 ### Escrever código para um aplicativo de agente
 
 > **Dica**: ao adicionar código, certifique-se de manter o recuo correto. Use os comentários existentes como guia, inserindo o novo código no mesmo nível de recuo.
 
-1. Digite o seguinte comando para editar o arquivo de código de agente que foi fornecido:
+1. Digite o seguinte comando para editar o arquivo de código que foi fornecido:
 
     ```
    code semantic-kernel.py
     ```
 
-1. Examine o código do arquivo. Ele contém:
-    - Algumas instruções **import** para adicionar referências a namespaces comumente usados
-    - Uma função *main* que carrega um arquivo que contém dados de despesas, pede instruções ao usuário e, em seguida, chama...
-    - Uma função **process_expenses_data** na qual o código para criar e usar seu agente deve ser adicionado
-    - Uma classe **EmailPlugin** que inclui uma função de kernel chamada **send_email**, que será usada pelo seu agente para simular a funcionalidade usada para enviar um email.
+1. Examine o código no arquivo. Ele contém:
+    - Algumas instruções de **importação** para adicionar referências a namespaces comumente usados
+    - Uma função *principal* que define dados para um relatório de despesas (em um aplicativo real, isso provavelmente seria enviado como um arquivo) e, em seguida, chama...
+    - Uma função **create_expense_claim** na qual o código para criar e usar seu agente deve ser adicionado
+    - Uma classe **EmailPlugin** que inclui uma função de kernel chamada **send_email**; que será usada pelo seu agente para simular a funcionalidade usada para enviar um email.
 
-1. Na parte superior do arquivo, após a instrução **import**, localize o comentário **Add references** e adicione o seguinte código para fazer referência aos namespaces nas bibliotecas necessárias para implementar o agente:
+1. Na parte superior do arquivo, após a instrução **importar** existente, localize o comentário **Adicionar referências** e adicione o seguinte código para fazer referência aos namespaces nas bibliotecas necessárias para implementar seu agente:
 
     ```python
    # Add references
@@ -150,7 +150,7 @@ Agora você já pode criar um aplicativo cliente que define um agente e uma fun�
    from typing import Annotated
     ```
 
-1. Próximo à parte inferior do arquivo, localize o comentário **Create a Plugin for the email functionality** e adicione o código a seguir para definir uma classe para um plug-in que contém uma função que o agente usará para enviar email (os plug-ins são uma maneira de adicionar funcionalidade personalizada aos agentes do Kernel Semântico)
+1. Próximo à parte inferior do arquivo, localize o comentário **Criar um plug-in para a funcionalidade** de e-mail e adicione o código a seguir para definir uma classe para um plug-in que contém uma função que seu agente usará para enviar e-mail (os plug-ins são uma maneira de adicionar funcionalidade personalizada aos agentes do Kernel Semântico)
 
     ```python
    # Create a Plugin for the email functionality
@@ -167,9 +167,9 @@ Agora você já pode criar um aplicativo cliente que define um agente e uma fun�
            print(body, "\n")
     ```
 
-    > **Observação**: a função *simula* o envio de um e-mail imprimindo-o no console. Em um aplicativo real, você usaria um serviço SMTP ou similar para realmente enviar o email.
+    > **Observação**: a função *simula o* envio de um e-mail imprimindo-o no console. Em um aplicativo real, você usaria um serviço SMTP ou similar para realmente enviar o e-mail!
 
-1. Faça backup acima do novo código de classe **EmailPlugin**, na função **create_expense_claim**, localize o comentário **Get configuration settings** e adicione o código a seguir para carregar o arquivo de configuração e criar um objeto **AzureAIAgentSettings** (que incluirá automaticamente as configurações do Agente de IA do Azure a partir da configuração).
+1. Faça backup acima do novo código de classe **EmailPlugin**, na função **create_expense_claim**, localize o comentário **Get configuration settings** e adicione o código a seguir para carregar o arquivo de configuração e criar um objeto **AzureAIAgentSettings** (que incluirá automaticamente as definições do Agente de IA do Azure da configuração).
 
     (Certifique-se de manter o nível de recuo)
 
@@ -179,7 +179,7 @@ Agora você já pode criar um aplicativo cliente que define um agente e uma fun�
    ai_agent_settings = AzureAIAgentSettings()
     ```
 
-1. Localize o comentário **Connect to the Azure AI Foundry project** e adicione o seguinte código para se conectar ao seu projeto da Fábrica de IA do Azure usando as credenciais do Azure que você usou para entrar.
+1. Encontre o comentário **Conectar-se à Fábrica de IA do Azure**, e adicione o seguinte código para se conectar ao seu projeto da Fábrica de IA do Azure usando as credenciais do Azure com as quais você está atualmente conectado.
 
     (Certifique-se de manter o nível de recuo)
 
@@ -195,7 +195,7 @@ Agora você já pode criar um aplicativo cliente que define um agente e uma fun�
    ):
     ```
 
-1. Localize o comentário **Define an Azure AI agent that sends an expense claim email** e adicione o código a seguir para criar uma definição do Agente de IA do Azure para seu agente.
+1. Localize o comentário **Definir um agente de IA do Azure que envia um email** de relatório de despesas e adicione o código a seguir para criar uma definição de Agente de IA do Azure para seu agente.
 
     (Certifique-se de manter o nível de recuo)
 
@@ -210,7 +210,7 @@ Agora você já pode criar um aplicativo cliente que define um agente e uma fun�
    )
     ```
 
-1. Localize o comentário **Create a semantic kernel agent** e adicione o código a seguir para criar um objeto de agente de kernel semântico para o agente de IA do Azure e inclua uma referência ao plug-in **EmailPlugin**.
+1. Localize o comentário **Criar um agente de kernel semântico** e adicione o código a seguir para criar um objeto de agente de kernel semântico para o agente de IA do Azure e inclua uma referência ao plug-in **EmailPlugin**.
 
     (Certifique-se de manter o nível de recuo)
 
@@ -223,16 +223,16 @@ Agora você já pode criar um aplicativo cliente que define um agente e uma fun�
    )
     ```
 
-1. Localize o comentário **Use the agent to process the expenses data** e adicione o código a seguir para criar um thread para o agente executar e, em seguida, invoque-o com uma mensagem de chat.
+1. Localize o comentário **Use the agent to generate an expense claim email** e adicione o código a seguir para criar uma conversa para o agente executar e, em seguida, invoque-o com uma mensagem de chat.
 
     (Certifique-se de manter o nível de recuo):
 
     ```python
-   # Use the agent to process the expenses data
+   # Use the agent to generate an expense claim email
    thread: AzureAIAgentThread = AzureAIAgentThread(client=project_client)
    try:
         # Add the input prompt to a list of messages to be submitted
-        prompt_messages = [f"{prompt}: {expenses_data}"]
+        prompt_messages = [f"Create an expense claim for the following expenses: {expenses_data}"]
         # Invoke the agent for the specified thread with the messages
         response = await expenses_agent.get_response(thread_id=thread.id, messages=prompt_messages)
         # Display the response
@@ -246,10 +246,9 @@ Agora você já pode criar um aplicativo cliente que define um agente e uma fun�
         await project_client.agents.delete_agent(expenses_agent.id)
     ```
 
-1. Revise o código completado pelo agente, usando os comentários para ajudar você a entender o que cada bloco de código faz e, em seguida, salve as alterações de código (**CTRL+S**).
-1. Mantenha o editor de código aberto caso precise corrigir algum erro de digitação no código, mas redimensione os painéis para que você possa ver mais do console de linha de comando.
+1. Revise o código concluído para seu agente, usando os comentários para ajudá-lo a entender o que cada bloco de código faz e, em seguida, salve suas alterações de código (**CTRL+S**).
 
-### Entre no Azure e execute o aplicativo.
+### Execute o aplicativo e entre no Azure.
 
 1. No painel da linha de comando do Cloud Shell abaixo do editor de código, insira o seguinte comando para entrar no Azure.
 
@@ -259,7 +258,7 @@ Agora você já pode criar um aplicativo cliente que define um agente e uma fun�
 
     **<font color="red">Você deve entrar no Azure, mesmo que a sessão do Cloud Shell já esteja autenticada.</font>**
 
-    > **Observação**: na maioria dos cenários, apenas usar *az login* será suficiente. No entanto, se você tiver assinaturas em vários locatários, talvez seja necessário especificar o locatário usando o parâmetro *--tenant*. Consulte [Entrar no Azure interativamente usando a CLI do Azure](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) para obter detalhes.
+    > **Observação**: na maioria dos cenários, apenas usar *az login* será suficiente. No entanto, se você tiver assinaturas em vários locatários, talvez seja necessário especificar o locatário usando o parâmetro *--tenant* . Consulte [Entrar no Azure interativamente usando a CLI do Azure](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) para obter detalhes.
     
 1. Quando solicitado, siga as instruções para abrir a página de entrada em uma nova guia e insira o código de autenticação fornecido e suas credenciais do Azure. Em seguida, conclua o processo de entrada na linha de comando, selecionando a assinatura que contém o hub da Fábrica de IA do Azure, se solicitado.
 1. Depois de entrar, insira o seguinte comando para executar o aplicativo:
@@ -268,17 +267,11 @@ Agora você já pode criar um aplicativo cliente que define um agente e uma fun�
    python semantic-kernel.py
     ```
     
-    O aplicativo será executado usando as credenciais da sessão autenticada do Azure para se conectar ao seu projeto e criar e executar o agente.
-
-1. Quando perguntado o que fazer com os dados de despesas, insira o seguinte prompt:
-
-    ```
-   Submit an expense claim
-    ```
-
-1. Quando o aplicativo for concluído, revise a saída. O agente terá redigido um email para uma declaração de despesas com base nos dados fornecidos.
+    O aplicativo é executado usando as credenciais da sessão autenticada do Azure para se conectar ao seu projeto e criar e executar o agente.
 
     > **Dica**: se o aplicativo falhar porque o limite de taxa foi excedido, aguarde alguns segundos e tente novamente. Se não houver cota suficiente disponível em sua assinatura, o modelo talvez não consiga responder.
+
+1. Quando o aplicativo for concluído, revise a saída. O agente deveria ter redigido um e-mail para uma declaração de despesas com base nos dados fornecidos.
 
 ## Resumo
 
