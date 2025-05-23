@@ -1,12 +1,12 @@
 ---
 lab:
   title: Explore o desenvolvimento do agente de I
-  description: Dê os primeiros passos no desenvolvimento de agentes de IA explorando as ferramentas de serviço do Agente de IA do Azure no Portal da Fábrica de IA do Azure.
+  description: Dê os primeiros passos no desenvolvimento de agentes de IA explorando o Serviço de Agente de IA do Azure no Portal da Fábrica de IA do Azure.
 ---
 
 # Explore o desenvolvimento do agente de I
 
-Neste exercício, você usa as ferramentas de serviço do Agente de IA do Azure no Portal da Fábrica de IA do Azure para criar um agente de IA simples que responde a perguntas sobre solicitações de despesas.
+Neste exercício, você usará o Serviço de Agente de IA do Azure no Portal da Fábrica de IA do Azure para criar um agente de IA simples que auxilia os funcionários em solicitações de despesas.
 
 Este exercício levará aproximadamente **30** minutos.
 
@@ -72,7 +72,13 @@ Agora que você tem um modelo implantado, está pronto para criar um agente de I
 
     Um novo agente com um nome como *Agent123* deve ser criado automaticamente (caso contrário, use o **botão + Novo agente** para criar um).
 
-1. Selecione seu novo agente. Em seguida, no painel **Configuração** do novo agente, defina o **Nome do agente** como `ExpensesAgent`, certifique-se de que a implantação do modelo gpt-4o que você criou anteriormente esteja selecionada e defina as **Instruções** como `Answer questions related to expense claims`.
+1. Selecione seu novo agente. Em seguida, no painel **Configuração** do novo agente, defina o **Nome do agente** como `ExpensesAgent`, certifique-se de que a implantação do modelo gpt-4o que você criou anteriormente esteja selecionada e defina as **Instruções** como:
+
+    ```prompt
+   You are an AI assistant for corporate expenses.
+   You answer questions about expenses based on the expenses policy data.
+   If a user wants to submit an expense claim, you get their email address, a description of the claim, and the amount to be claimed and write the claim details to a text file that the user can download.
+    ```
 
     ![Captura de tela da página de configuração do agente de IA no Portal da Fábrica de IA do Azure.](./Media/ai-agent-setup.png)
 
@@ -83,20 +89,27 @@ Agora que você tem um modelo implantado, está pronto para criar um agente de I
 
 1. No painel **Configuração**, na seção **Conhecimento**, verifique se **Expenses_Vector_Store** está relacionado e indicado como contendo 1 arquivo.
 
-    > **Observação**: você também pode adicionar **Ações** a um agente para automatizar tarefas. Neste exemplo simples de agente de recuperação de informações, nenhuma ação é necessária.
+1. Abaixo da seção **Conhecimento**, ao lado de **Ações**, selecione **+ Adicionar**. Em seguida, na caixa de diálogo **Adicionar ação**, selecione **Interprete de código** e, em seguida, clique em **Salvar** (você não precisa carregar nenhum arquivo para o interprete de código).
+
+    Seu agente usará o documento que você carregou como fonte de conhecimento para *fundamentar* as respostas (em outras palavras, o agente responderá a perguntas com base no conteúdo deste documento). Ele usará a ferramenta intérprete de código conforme necessário para executar ações gerando e executando seu próprio código Python.
 
 ## Testar seu agente
 
 Agora que você criou um agente, pode testá-lo no playground do Portal da Fábrica de IA do Azure.
 
 1. Na parte superior do painel **Configuração** do seu agente, selecione **Experimentar no playground**.
-1. No playground, insira o prompt `What's the maximum I can claim for meals?` e revise a resposta do agente, que deve ser baseada nas informações do documento de política de despesas que você adicionou como conhecimento à configuração do agente.
-
-    ![Captura de tela do playground no Portal da Fábrica de IA do Azure.](./Media/ai-agent-playground.png)
+1. No playground, insira o prompt `What's the maximum I can claim for meals?` e revise a resposta do agente, que será baseada nas informações do documento de política de despesas que você adicionou como conhecimento à configuração do agente.
 
     > **Observação**: se o agente não responder porque o limite de taxa foi excedido. aguarde alguns segundos e tente novamente. Se não houver cota suficiente disponível em sua assinatura, o modelo talvez não consiga responder.
 
-1. Tente uma pergunta de acompanhamento, curta `What about accommodation?` e revise a resposta.
+1. Continue com o seguinte prompt de acompanhamento `I'd like to submit a claim for a meal.` e revise a resposta. O agente solicitará as informações necessárias para enviar uma declaração.
+1. Forneça ao agente um endereço de email; por exemplo, `fred@contoso.com`. O agente reconhecerá a resposta e solicitará as informações restantes necessárias para o relatório de despesas (descrição e valor)
+1. Envie um prompt que descreva a declaração e o valor; por exemplo, `Breakfast cost me $20`.
+1. O agente usará o intérprete de código para preparar o arquivo de texto do relatório de despesas e fornecer um link para que você possa baixá-lo.
+
+    ![Captura de tela do playground no Portal da Fábrica de IA do Azure.](./Media/ai-agent-playground.png)
+
+1. Baixe e abra o documento de texto para ver os detalhes da declaração de despesas.
 
 ## Limpar
 
