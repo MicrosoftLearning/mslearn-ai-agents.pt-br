@@ -14,55 +14,42 @@ Este exercício deve levar aproximadamente **30** minutos para ser concluído.
 
 > **Observação**: algumas das tecnologias usadas neste exercício estão em versão prévia ou em desenvolvimento ativo. Você pode observar algum comportamento, avisos ou erros inesperados.
 
-## Criar um projeto do Azure AI Foundry
+## Implantar um modelo em um projeto da Fábrica de IA do Azure
 
-Vamos começar criando um projeto da Fábrica de IA do Azure.
+Vamos começar implantando um modelo em um projeto da Fábrica de IA do Azure.
 
 1. Em um navegador da Web, abra o [Portal da Fábrica de IA do Azure](https://ai.azure.com) em `https://ai.azure.com` e entre usando suas credenciais do Azure. Feche todas as dicas ou painéis de início rápido abertos na primeira vez que você entrar e, se necessário, use o logotipo da **Fábrica de IA do Azure** no canto superior esquerdo para navegar até a home page, que é semelhante à imagem a seguir (feche o painel **Ajuda** se estiver aberto):
 
     ![Captura de tela do portal do Azure AI Foundry.](./Media/ai-foundry-home.png)
 
-1. Na home page, selecione **+Criar projeto**.
-1. No assistente **Criar um projeto**, insira um nome de projeto adequado e, se um hub existente for sugerido, escolha a opção de criar um novo. Em seguida, examine os recursos do Azure que serão criados automaticamente para dar suporte ao hub e ao projeto.
-1. Selecione **Personalizar** e especifique as seguintes configurações para o hub:
-    - **Nome do hub**: *um nome válido para o seu hub*
+1. Na home page, na seção **Explorar modelos e recursos**, pesquise pelo modelo `gpt-4o`, que usaremos em nosso projeto.
+1. Nos resultados da pesquisa, selecione o modelo **gpt-4o** para ver os detalhes e, na parte superior da página do modelo, clique em **Usar este modelo**.
+1. Quando solicitado a criar um projeto, insira um nome válido para o projeto e expanda **Opções avançadas**.
+1. Confirme as seguintes configurações do projeto:
+    - **Recurso da Fábrica de IA do Azure**: *um nome válido para o recurso da Fábrica de IA do Azure*
     - **Assinatura**: *sua assinatura do Azure*
     - **Grupo de recursos**: *criar ou selecionar um grupo de recursos*
-    - **Localização**: selecione uma das seguintes regiões\*:
-        - eastus
-        - eastus2
-        - swedencentral
-        - westus
-        - westus3
-    - **Conectar os Serviços de IA do Azure ou o OpenAI do Azure**: *Criar um novo recurso de Serviços de IA*
-    - **Conectar-se à Pesquisa de IA do Azure**: Ignorar a conexão
+    - **Região**: *Selecione qualquer **Local compatível com os Serviços de IA***\*
 
-    > \* No momento da redação deste artigo, essas regiões dão suporte ao modelo gpt-4o para uso em agentes. A disponibilidade do modelo é limitada por cotas regionais. No caso de um limite de cota ser atingido mais adiante no exercício, há a possibilidade de você precisar criar outro projeto em uma região diferente.
+    > \* Alguns recursos da IA do Azure são restritos por cotas de modelo regional. Caso um limite de cota seja excedido posteriormente no exercício, é possível que você precise criar outro recurso em uma região diferente.
 
-1. Clique em **Avançar** e revise a configuração. Em seguida, selecione **Criar** e aguarde a conclusão do processo.
-1. Quando o projeto for criado, feche todas as dicas exibidas e examine a página do projeto no Portal da Fábrica de IA do Azure, que deve ser semelhante à imagem a seguir:
+1. Clique em **Criar** e aguarde a criação do projeto, incluindo a implantação do modelo gpt-4 selecionado.
+1. Quando o projeto for criado, o playground chat abrirá automaticamente.
+
+    > **Observação**: a configuração padrão do TPM para este modelo pode ser muito baixa para este exercício. Um TPM baixo ajuda a evitar o uso excessivo da cota disponível na assinatura que você está usando. 
+
+1. No painel de navegação à esquerda, clique em **Modelos e pontos de extremidade** e selecione a implantação **gpt-4o**.
+
+1. Clique em **Editar** e aumente o **Limite de taxa de tokens por minuto**
+
+   > **OBSERVAÇÃO**: 40.000 TPM são suficientes para os dados usados neste exercício. Se a sua cota disponível for menor que isso, você poderá concluir o exercício, mas talvez seja necessário aguardar e reenviar as solicitações se o limite de taxa for excedido.
+
+1. No painel **Configuração**, anote o nome da implantação do modelo; que será **gpt-4o**. Você pode confirmar isso visualizando a implantação na página **Modelos e pontos de extremidade** (basta abrir essa página no painel de navegação à esquerda).
+1. No painel de navegação à esquerda, selecione **Visão geral** para ver a página principal do projeto, que será assim:
+
+    > **Observação**: se um erro de *permissões insuficientes** for exibido, use o botão **Corrigir** para resolvê-lo.
 
     ![Captura de tela dos detalhes de um projeto IA do Azure no Portal da Fábrica de IA do Azure.](./Media/ai-foundry-project.png)
-
-## Implantar um modelo de IA generativa
-
-Agora você está pronto para implantar um modelo de linguagem de IA generativa para dar suporte aos seus agentes.
-
-1. No painel à esquerda do seu projeto, na seção **Meus ativos**, selecione a página **Modelos + pontos de extremidade**.
-1. Na página **Modelos + pontos extremidades**, na guia **Implantações de modelo**, no menu **+ Implantar modelo**, selecione **Implantar modelo base**.
-1. Procure o modelo **gpt-4o** na lista, selecione-o e confirme-o.
-1. Crie uma nova implantação do modelo com as seguintes configurações selecionando **Personalizar** nos detalhes de implantação:
-    - **Nome da implantação**: *Um nome válido para a implantação de modelo*
-    - **Tipo de implantação**: padrão global
-    - **Atualização automática de versão**: Ativado
-    - **Versão do modelo**: *selecione a versão mais recente disponivel*
-    - **Recurso de IA conectado**: *selecione a sua conexão de recursos do OpenAI do Azure*
-    - **Limite de taxa de tokens por minuto (milhares):** 60 mil *(ou o máximo disponível em sua assinatura, se inferior a 60 mil)*
-    - **Filtro de conteúdo**: DefaultV2
-
-    > **Observação**: A redução do TPM ajuda a evitar o uso excessivo da cota disponível na assinatura que você está usando. 60.000 TPM são suficientes para os dados usados neste exercício. Se a sua cota disponível for menor que isso, você poderá concluir o exercício, mas talvez seja necessário aguardar e reenviar as solicitações se o limite de taxa for excedido.
-
-1. Aguarde até que a implantação seja concluída.
 
 ## Criar um aplicativo cliente do Agente de IA
 
@@ -122,7 +109,7 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
 
     O arquivo é aberto em um editor de código.
 
-1. No arquivo de código, substitua o espaço reservado **your_project_connection_string** pela cadeia de conexão do seu projeto (copiada da página **Visão Geral** do projeto no portal da Fábrica de IA do Azure), e o espaço reservado **your_model_deployment** pelo nome que você atribuiu à implantação do seu modelo gpt-4.
+1. No arquivo de código, substitua o espaço reservado **your_project_endpoint** pelo ponto de extremidade do projeto (copiado da página **Visão Geral** do projeto no portal da Fábrica de IA do Azure) e o espaço reservado **your_model_deployment** pelo nome que você atribuiu à implantação do modelo gpt-4.
 
 1. Depois de substituir os espaços reservados, use o comando **CTRL+S** para salvar suas alterações e, em seguida, use o comando **CTRL+Q** para fechar o editor de código, mantendo a linha de comando do Cloud Shell aberta.
 

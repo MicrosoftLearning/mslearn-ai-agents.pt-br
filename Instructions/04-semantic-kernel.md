@@ -4,63 +4,41 @@ lab:
   description: Saiba como usar o SDK do Kernel Semântico para criar e usar um agente de Serviço do Agente de IA do Azure.
 ---
 
-# Desenvolva agentes de IA usando o Azure OpenAI e o SDK do Kernel Semântico
+# Desenvolver agentes de IA do Azure com o SDK do Kernel Semântico
 
-Neste exercício, você usará o Serviço de Agente de IA do Azure e o Kernel Semântico para criar um agente de IA que cria um email de relatório de despesas.
+Neste exercício, você usará o Serviço de Agente de IA do Azure e o Kernel Semântico para criar um agente de IA que processa solicitações de despesas.
 
 Este exercício deve levar aproximadamente **30** minutos para ser concluído.
 
 > **Observação**: algumas das tecnologias usadas neste exercício estão em versão prévia ou em desenvolvimento ativo. Você pode observar algum comportamento, avisos ou erros inesperados.
 
-## Criar um projeto do Azure AI Foundry
+## Implantar um modelo em um projeto da Fábrica de IA do Azure
 
-Vamos começar criando um projeto da Fábrica de IA do Azure.
+Vamos começar implantando um modelo em um projeto da Fábrica de IA do Azure.
 
 1. Em um navegador da Web, abra o [Portal da Fábrica de IA do Azure](https://ai.azure.com) em `https://ai.azure.com` e entre usando suas credenciais do Azure. Feche todas as dicas ou painéis de início rápido abertos na primeira vez que você entrar e, se necessário, use o logotipo da **Fábrica de IA do Azure** no canto superior esquerdo para navegar até a home page, que é semelhante à imagem a seguir (feche o painel **Ajuda** se estiver aberto):
 
     ![Captura de tela do portal do Azure AI Foundry.](./Media/ai-foundry-home.png)
 
-1. Na home page, selecione **+Criar projeto**.
-1. No assistente **Criar um projeto**, insira um nome de projeto adequado e, se um hub existente for sugerido, escolha a opção de criar um novo. Em seguida, examine os recursos do Azure que serão criados automaticamente para dar suporte ao hub e ao projeto.
-1. Selecione **Personalizar** e especifique as seguintes configurações para o hub:
-    - **Nome do hub**: *um nome válido para o seu hub*
+1. Na home page, na seção **Explorar modelos e funcionalidades**, pesquise pelo modelo `gpt-4o`, que usaremos em nosso projeto.
+1. Nos resultados da pesquisa, selecione o modelo **gpt-4o** para ver os detalhes e, na parte superior da página do modelo, clique em **Usar este modelo**.
+1. Quando solicitado a criar um projeto, insira um nome válido para o projeto e expanda **Opções avançadas**.
+1. Confirme as seguintes configurações do projeto:
+    - **Recurso da Fábrica de IA do Azure**: *um nome válido para o recurso da Fábrica de IA do Azure*
     - **Assinatura**: *sua assinatura do Azure*
     - **Grupo de recursos**: *criar ou selecionar um grupo de recursos*
-    - **Localização**: selecione uma das seguintes regiões\*:
-        - eastus
-        - eastus2
-        - swedencentral
-        - westus
-        - westus3
-    - **Conectar os Serviços de IA do Azure ou o OpenAI do Azure**: *Criar um novo recurso de Serviços de IA*
-    - **Conectar-se à Pesquisa de IA do Azure**: Ignorar a conexão
+    - **Região**: *Selecione qualquer **Local compatível com os Serviços de IA***\*
 
-    > \* No momento da redação deste artigo, essas regiões dão suporte ao modelo gpt-4o para uso em agentes. A disponibilidade do modelo é limitada por cotas regionais. No caso de um limite de cota ser atingido mais adiante no exercício, há a possibilidade de você precisar criar outro projeto em uma região diferente.
+    > \* Alguns recursos da IA do Azure são restritos por cotas de modelo regional. Caso um limite de cota seja excedido posteriormente no exercício, é possível que você precise criar outro recurso em uma região diferente.
 
-1. Clique em **Avançar** e revise a configuração. Em seguida, selecione **Criar** e aguarde a conclusão do processo.
-1. Quando o projeto for criado, feche todas as dicas exibidas e examine a página do projeto no Portal da Fábrica de IA do Azure, que deve ser semelhante à imagem a seguir:
+1. Clique em **Criar** e aguarde a criação do projeto, incluindo a implantação do modelo gpt-4 selecionado.
+1. Quando o projeto for criado, o playground chat abrirá automaticamente.
+1. No painel **Configuração**, anote o nome da implantação do modelo; que será **gpt-4o**. Você pode confirmar isso visualizando a implantação na página **Modelos e pontos de extremidade** (basta abrir essa página no painel de navegação à esquerda).
+1. No painel de navegação à esquerda, selecione **Visão geral** para ver a página principal do projeto, que será assim:
+
+    > **Observação**: se um erro de *permissões insuficientes** for exibido, use o botão **Corrigir** para resolvê-lo.
 
     ![Captura de tela dos detalhes de um projeto IA do Azure no Portal da Fábrica de IA do Azure.](./Media/ai-foundry-project.png)
-
-## Implantar um modelo de IA generativa
-
-Agora você está pronto para implantar um modelo de linguagem de IA generativo para dar suporte ao seu agente.
-
-1. No painel à esquerda do seu projeto, na seção **Meus ativos**, selecione a página **Modelos + pontos de extremidade**.
-1. Na página **Modelos + pontos extremidades**, na guia **Implantações de modelo**, no menu **+ Implantar modelo**, selecione **Implantar modelo base**.
-1. Procure o modelo **gpt-4o** na lista, selecione-o e confirme-o.
-1. Crie uma nova implantação do modelo com as seguintes configurações selecionando **Personalizar** nos detalhes de implantação:
-    - **Nome da implantação**: *Um nome válido para a implantação de modelo*
-    - **Tipo de implantação**: padrão global
-    - **Atualização automática de versão**: Ativado
-    - **Versão do modelo**: *selecione a versão mais recente disponivel*
-    - **Recurso de IA conectado**: *selecione a sua conexão de recursos do OpenAI do Azure*
-    - **Limite de taxa de tokens por minuto (milhares):** 50 mil *(ou o máximo disponível em sua assinatura, se inferior a 50 mil)*
-    - **Filtro de conteúdo**: DefaultV2
-
-    > **Observação**: A redução do TPM ajuda a evitar o uso excessivo da cota disponível na assinatura que você está usando. 50.000 TPM são suficientes para os dados usados neste exercício. Se a sua cota disponível for menor que isso, você poderá concluir o exercício, mas talvez seja necessário aguardar e reenviar as solicitações se o limite de taxa for excedido.
-
-1. Aguarde até que a implantação seja concluída.
 
 ## Criar um aplicativo cliente do agente
 
@@ -91,14 +69,14 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
 
     > **Dica**: ao inserir comandos no Cloud Shell, a saída poderá ocupar uma grande quantidade do buffer da tela e o cursor na linha atual pode ficar obscurecido. Você pode limpar a tela digitando o comando `cls` para facilitar o foco em cada tarefa.
 
-1. Quando o repositório tiver sido clonado, digite o seguinte comando para alterar o diretório de trabalho para a pasta que contém os arquivos de código e relacione todos eles.
+1. Quando o repositório tiver sido clonado, insira o comando a seguir para alterar o diretório de trabalho para a pasta que contém os arquivos de código e listar todos eles.
 
     ```
    cd ai-agents/Labfiles/04-semantic-kernel/python
    ls -a -l
     ```
 
-    Os arquivos fornecidos incluem o código do aplicativo e um arquivo para definições de configuração.
+    Os arquivos fornecidos incluem código do aplicativo, um arquivo para definições de configuração e um arquivo que contém dados de despesas.
 
 ### Definir as configurações do aplicativo
 
@@ -120,7 +98,7 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
 
     O arquivo é aberto em um editor de código.
 
-1. No arquivo de código, substitua o espaço reservado **your_project_connection_string** pela cadeia de conexão do seu projeto (copiada da página **Visão Geral** do projeto no portal da Fábrica de IA do Azure), e o espaço reservado **your_model_deployment** pelo nome que você atribuiu à implantação do seu modelo gpt-4.
+1. No arquivo de código, substitua o espaço reservado **your_project_endpoint** pelo ponto de extremidade do projeto (copiado da página **Visão Geral** do projeto no portal da Fábrica de IA do Azure) e o espaço reservado **your_model_deployment** pelo nome que você atribuiu à implantação do modelo gpt-4.
 1. Depois de substituir os espaços reservados, use o comando **CTRL+S** para salvar suas alterações e, em seguida, use o comando **CTRL+Q** para fechar o editor de código, mantendo a linha de comando do Cloud Shell aberta.
 
 ### Escrever código para um aplicativo de agente
@@ -134,10 +112,10 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
     ```
 
 1. Examine o código no arquivo. Ele contém:
-    - Algumas instruções de **importação** para adicionar referências a namespaces comumente usados
-    - Uma função *principal* que define dados para um relatório de despesas (em um aplicativo real, isso provavelmente seria enviado como um arquivo) e, em seguida, chama...
-    - Uma função **create_expense_claim** na qual o código para criar e usar seu agente deve ser adicionado
-    - Uma classe **EmailPlugin** que inclui uma função de kernel chamada **send_email**; que será usada pelo seu agente para simular a funcionalidade usada para enviar um email.
+    - Algumas instruções **import** para adicionar referências a namespaces comumente usados
+    - Uma função *main* que carrega um arquivo que contém dados de despesas, pede instruções ao usuário e, em seguida, chama...
+    - Uma função **process_expenses_data** na qual o código para criar e usar seu agente deve ser adicionado
+    - Uma classe **EmailPlugin** que inclui uma função de kernel chamada **send_email**, que será usada pelo seu agente para simular a funcionalidade usada para enviar um email.
 
 1. Na parte superior do arquivo, após a instrução **importar** existente, localize o comentário **Adicionar referências** e adicione o seguinte código para fazer referência aos namespaces nas bibliotecas necessárias para implementar seu agente:
 
@@ -223,16 +201,16 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
    )
     ```
 
-1. Localize o comentário **Use the agent to generate an expense claim email** e adicione o código a seguir para criar uma conversa para o agente executar e, em seguida, invoque-o com uma mensagem de chat.
+1. Localize o comentário **Use the agent to process the expenses data** e adicione o código a seguir para criar um thread para o agente executar e, em seguida, invoque-o com uma mensagem de chat.
 
     (Certifique-se de manter o nível de recuo):
 
     ```python
-   # Use the agent to generate an expense claim email
+   # Use the agent to process the expenses data
    thread: AzureAIAgentThread = AzureAIAgentThread(client=project_client)
    try:
         # Add the input prompt to a list of messages to be submitted
-        prompt_messages = [f"Create an expense claim for the following expenses: {expenses_data}"]
+        prompt_messages = [f"{prompt}: {expenses_data}"]
         # Invoke the agent for the specified thread with the messages
         response = await expenses_agent.get_response(thread_id=thread.id, messages=prompt_messages)
         # Display the response
@@ -246,9 +224,10 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
         await project_client.agents.delete_agent(expenses_agent.id)
     ```
 
-1. Revise o código concluído para seu agente, usando os comentários para ajudá-lo a entender o que cada bloco de código faz e, em seguida, salve suas alterações de código (**CTRL+S**).
+1. Revise o código completado pelo agente, usando os comentários para ajudar você a entender o que cada bloco de código faz e, em seguida, salve as alterações de código (**CTRL+S**).
+1. Mantenha o editor de código aberto caso precise corrigir algum erro de digitação no código, mas redimensione os painéis para que você possa ver mais do console de linha de comando.
 
-### Execute o aplicativo e entre no Azure.
+### Entre no Azure e execute o aplicativo.
 
 1. No painel da linha de comando do Cloud Shell abaixo do editor de código, insira o seguinte comando para entrar no Azure.
 
@@ -267,11 +246,17 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
    python semantic-kernel.py
     ```
     
-    O aplicativo é executado usando as credenciais da sessão autenticada do Azure para se conectar ao seu projeto e criar e executar o agente.
+    O aplicativo será executado usando as credenciais da sessão autenticada do Azure para se conectar ao seu projeto e criar e executar o agente.
+
+1. Quando perguntado o que fazer com os dados de despesas, insira o seguinte prompt:
+
+    ```
+   Submit an expense claim
+    ```
+
+1. Quando o aplicativo for concluído, revise a saída. O agente terá redigido um email para uma declaração de despesas com base nos dados fornecidos.
 
     > **Dica**: se o aplicativo falhar porque o limite de taxa foi excedido, aguarde alguns segundos e tente novamente. Se não houver cota suficiente disponível em sua assinatura, o modelo talvez não consiga responder.
-
-1. Quando o aplicativo for concluído, revise a saída. O agente deveria ter redigido um e-mail para uma declaração de despesas com base nos dados fornecidos.
 
 ## Resumo
 
