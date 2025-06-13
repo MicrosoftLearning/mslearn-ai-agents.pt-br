@@ -159,7 +159,7 @@ Agora que você criou seu projeto na Fábrica de IA, vamos desenvolver um aplica
    # Add references
    from azure.identity import DefaultAzureCredential
    from azure.ai.agents import AgentsClient
-   from azure.ai.agents.models import FunctionTool, ToolSet, ListSortOrder
+   from azure.ai.agents.models import FunctionTool, ToolSet, ListSortOrder, MessageRole
    from user_functions import user_functions
     ```
 
