@@ -1,6 +1,6 @@
 ---
 lab:
-  title: Desenvolva uma solução multiagente
+  title: Desenvolva uma solução multiagente com o Kernel Semântico
   description: Saiba como configurar vários agentes para colaborar usando o SDK do Semantic Kernel
 ---
 
