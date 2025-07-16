@@ -20,47 +20,30 @@ Vamos começar criando um projeto da Fábrica de IA do Azure.
 
     ![Captura de tela do portal do Azure AI Foundry.](./Media/ai-foundry-home.png)
 
-1. Na home page, selecione **+Criar projeto**.
-1. No assistente **Criar um projeto**, insira um nome de projeto adequado e, se um hub existente for sugerido, escolha a opção de criar um novo. Em seguida, examine os recursos do Azure que serão criados automaticamente para dar suporte ao hub e ao projeto.
-1. Selecione **Personalizar** e especifique as seguintes configurações para o hub:
-    - **Nome do hub**: *um nome válido para o seu hub*
+1. Na home page, clique em **Criar um agente**.
+1. Quando solicitado a criar um projeto, insira um nome válido para o projeto e expanda **Opções avançadas**.
+1. Confirme as seguintes configurações do projeto:
+    - **Recurso da Fábrica de IA do Azure**: *um nome válido para o recurso da Fábrica de IA do Azure*
     - **Assinatura**: *sua assinatura do Azure*
     - **Grupo de recursos**: *criar ou selecionar um grupo de recursos*
-    - **Localização**: selecione uma das seguintes regiões\*:
-        - eastus
-        - eastus2
-        - swedencentral
-        - westus
-        - westus3
-    - **Conectar os Serviços de IA do Azure ou o OpenAI do Azure**: *Criar um novo recurso de Serviços de IA*
-    - **Conectar-se à Pesquisa de IA do Azure**: Ignorar a conexão
+    - **Região**: *Selecione qualquer **Local compatível com os Serviços de IA***\*
 
-    > \* No momento da redação deste artigo, essas regiões dão suporte ao modelo gpt-4o para uso em agentes. A disponibilidade do modelo é limitada por cotas regionais. No caso de um limite de cota ser atingido mais adiante no exercício, há a possibilidade de você precisar criar outro projeto em uma região diferente.
+    > \* Alguns recursos da IA do Azure são restritos por cotas de modelo regional. Caso um limite de cota seja excedido posteriormente no exercício, é possível que você precise criar outro recurso em uma região diferente.
 
-1. Clique em **Avançar** e revise a configuração. Em seguida, selecione **Criar** e aguarde a conclusão do processo.
-1. Quando o projeto for criado, feche todas as dicas exibidas e examine a página do projeto no Portal da Fábrica de IA do Azure, que deve ser semelhante à imagem a seguir:
+1. Clique em **Criar** e aguarde a criação do projeto.
+1. Quando o projeto for criado, o playground Agentes abrirá automaticamente para que você possa selecionar um implantar um modelo:
 
-    ![Captura de tela dos detalhes de um projeto IA do Azure no Portal da Fábrica de IA do Azure.](./Media/ai-foundry-project.png)
+    ![Captura de tela do playground Agentes de um projeto da Fábrica de IA do Azure](./Media/ai-foundry-agents-playground.png)
 
-## Implantar um modelo de IA generativa
+    >**Observação**: um modelo base GPT-4o é implantado automaticamente ao criar o agente e o projeto.
 
-Agora você está pronto para implantar um modelo de linguagem de IA generativo para dar suporte ao seu agente.
+1. No painel de navegação à esquerda, selecione **Visão geral** para ver a página principal do projeto, que será assim:
 
-1. No painel à esquerda do seu projeto, na seção **Meus ativos**, selecione a página **Modelos + pontos de extremidade**.
-1. Na página **Modelos + pontos extremidades**, na guia **Implantações de modelo**, no menu **+ Implantar modelo**, selecione **Implantar modelo base**.
-1. Procure o modelo **gpt-4o** na lista, selecione-o e confirme-o.
-1. Crie uma nova implantação do modelo com as seguintes configurações selecionando **Personalizar** nos detalhes de implantação:
-    - **Nome da implantação**: *Um nome válido para a implantação de modelo*
-    - **Tipo de implantação**: padrão global
-    - **Atualização automática de versão**: Ativado
-    - **Versão do modelo**: *selecione a versão mais recente disponivel*
-    - **Recurso de IA conectado**: *selecione a sua conexão de recursos do OpenAI do Azure*
-    - **Limite de taxa de tokens por minuto (milhares):** 50 mil *(ou o máximo disponível em sua assinatura, se inferior a 50 mil)*
-    - **Filtro de conteúdo**: DefaultV2
+    > **Observação**: se um erro de *permissões insuficientes** for exibido, use o botão **Corrigir** para resolvê-lo.
 
-    > **Observação**: A redução do TPM ajuda a evitar o uso excessivo da cota disponível na assinatura que você está usando. 50.000 TPM são suficientes para os dados usados neste exercício. Se a sua cota disponível for menor que isso, você poderá concluir o exercício, mas talvez seja necessário aguardar e reenviar as solicitações se o limite de taxa for excedido.
+    ![Captura de tela de uma página de visão geral do projeto da Fábrica de IA do Azure.](./Media/ai-foundry-project.png)
 
-1. Aguarde até que a implantação seja concluída.
+1. Copie os valores do **ponto de extremidade do projeto da Fábrica de IA do Azure** para um bloco de notas, pois você os usará para se conectar ao seu projeto em um aplicativo cliente.
 
 ## Criar um aplicativo cliente do agente
 
@@ -107,7 +90,7 @@ Agora você está pronto para criar um aplicativo cliente que usa um agente. Alg
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install python-dotenv azure-identity azure-ai-projects
+   pip install -r requirements.txt azure-ai-projects
     ```
 
 1. Digite o seguinte comando para editar o arquivo de configuração que foi fornecido:
@@ -118,8 +101,8 @@ Agora você está pronto para criar um aplicativo cliente que usa um agente. Alg
 
     O arquivo é aberto em um editor de código.
 
-1. No arquivo de código, substitua o espaço reservado **your_project_connection_string** pela cadeia de conexão do seu projeto (copiada da página **Visão Geral** do projeto no portal da Fábrica de IA do Azure), e o espaço reservado **your_model_deployment** pelo nome que você atribuiu à implantação do seu modelo gpt-4.
-1. Depois de substituir os espaços reservados, use o comando **CTRL+S** para salvar suas alterações e, em seguida, use o comando **CTRL+Q** para fechar o editor de código, mantendo a linha de comando do Cloud Shell aberta.
+1. No arquivo de código, substitua o espaço reservado **your_project_endpoint** pelo ponto de extremidade do projeto (copiado da página **Visão Geral** no portal da Fábrica de IA do Azure).
+1. Depois de substituir o espaço reservado, use o comando **CTRL+S** para salvar suas alterações e, em seguida, use o comando **CTRL+Q** para fechar o editor de código, mantendo a linha de comando do Cloud Shell aberta.
 
 ### Escrever código para um aplicativo de agente
 
@@ -137,32 +120,32 @@ Agora você está pronto para criar um aplicativo cliente que usa um agente. Alg
     ```python
    # Add references
    from azure.identity import DefaultAzureCredential
-   from azure.ai.projects import AIProjectClient
-   from azure.ai.projects.models import FilePurpose, CodeInterpreterTool
+   from azure.ai.agents import AgentsClient
+   from azure.ai.agents.models import FilePurpose, CodeInterpreterTool, ListSortOrder, MessageRole
     ```
 
-1. Localize o comentário **Conectar-se ao projeto da Fábrica de IA do Azure** e adicione o código a seguir para se conectar ao projeto de IA do Azure.
+1. Localize o comentário **Connect to the Agent client** e adicione o código a seguir para se conectar ao projeto da IA do Azure.
 
     > **Dica**: tenha cuidado para manter o nível de recuo correto.
 
     ```python
-   # Connect to the Azure AI Foundry project
-   project_client = AIProjectClient.from_connection_string(
-        credential=DefaultAzureCredential
-            (exclude_environment_credential=True,
-             exclude_managed_identity_credential=True),
-        conn_str=PROJECT_CONNECTION_STRING
+   # Connect to the Agent client
+   agent_client = AgentsClient(
+       endpoint=project_endpoint,
+       credential=DefaultAzureCredential
+           (exclude_environment_credential=True,
+            exclude_managed_identity_credential=True)
    )
-   with project_client:
+   with agent_client:
     ```
 
-    O código se conecta ao projeto da Fábrica de IA do Azure usando as credenciais atuais do Azure. A instrução final *with project_client* inicia um bloco de código que define o escopo do cliente, garantindo que ele seja limpo quando o código dentro do bloco for concluído.
+    O código se conecta ao projeto da Fábrica de IA do Azure usando as credenciais atuais do Azure. A instrução final *with agent_client* inicia um bloco de código que define o escopo do cliente, garantindo que ele seja limpo quando o código dentro do bloco for concluído.
 
-1. Localize o comentário **Faça upload do arquivo de dados e crie um CodeInterpreterTool**, dentro do bloco *com project_client*, e adicione o seguinte código para fazer upload do arquivo de dados no projeto e criar um CodeInterpreterTool que possa acessar os dados nele:
+1. Localize o comentário **Upload the data file and create a CodeInterpreterTool** dentro do bloco *with project_client* e adicione o seguinte código para fazer upload do arquivo de dados no projeto e criar uma CodeInterpreterTool que possa acessar os dados nele:
 
     ```python
    # Upload the data file and create a CodeInterpreterTool
-   file = project_client.agents.upload_file_and_poll(
+   file = agent_client.files.upload_and_poll(
         file_path=file_path, purpose=FilePurpose.AGENTS
    )
    print(f"Uploaded {file.filename}")
@@ -174,8 +157,8 @@ Agora você está pronto para criar um aplicativo cliente que usa um agente. Alg
 
     ```python
    # Define an agent that uses the CodeInterpreterTool
-   agent = project_client.agents.create_agent(
-        model=MODEL_DEPLOYMENT,
+   agent = agent_client.create_agent(
+        model=model_deployment,
         name="data-agent",
         instructions="You are an AI agent that analyzes the data in the file that has been uploaded. If the user requests a chart, create it and save it as a .png file.",
         tools=code_interpreter.definitions,
@@ -188,7 +171,7 @@ Agora você está pronto para criar um aplicativo cliente que usa um agente. Alg
 
     ```python
    # Create a thread for the conversation
-   thread = project_client.agents.create_thread()
+   thread = agent_client.threads.create()
     ```
     
 1. Observe que a próxima seção do código configura um loop para um usuário inserir um prompt, terminando quando o usuário digita "sair".
@@ -197,16 +180,16 @@ Agora você está pronto para criar um aplicativo cliente que usa um agente. Alg
 
     ```python
    # Send a prompt to the agent
-   message = project_client.agents.create_message(
+   message = agent_client.messages.create(
         thread_id=thread.id,
         role="user",
         content=user_prompt,
     )
 
-    run = project_client.agents.create_and_process_run(thread_id=thread.id, agent_id=agent.id)
-     ```
+   run = agent_client.runs.create_and_process(thread_id=thread.id, agent_id=agent.id)
+    ```
 
-1. Encontre o comentário **Verificar o status da execução para ver se há falhas** e adicione o seguinte código para mostrar qualquer erro que ocorra.
+1. Encontre o comentário **Check the run status for failures** e adicione o seguinte código para verificar se há erros.
 
     ```python
    # Check the run status for failures
@@ -218,10 +201,12 @@ Agora você está pronto para criar um aplicativo cliente que usa um agente. Alg
 
     ```python
    # Show the latest response from the agent
-   messages = project_client.agents.list_messages(thread_id=thread.id)
-   last_msg = messages.get_last_text_message_by_role("assistant")
+   last_msg = agent_client.messages.get_last_message_text_by_role(
+       thread_id=thread.id,
+       role=MessageRole.AGENT,
+   )
    if last_msg:
-        print(f"Last Message: {last_msg.text.value}")
+       print(f"Last Message: {last_msg.text.value}")
     ```
 
 1. Localize o comentário **Get the conversation history**, que ocorre após o término do loop, e adicione o seguinte código para imprimir as mensagens da thread da conversa, invertendo a ordem para mostrá-las em sequência cronológica
@@ -229,27 +214,31 @@ Agora você está pronto para criar um aplicativo cliente que usa um agente. Alg
     ```python
    # Get the conversation history
    print("\nConversation Log:\n")
-   messages = project_client.agents.list_messages(thread_id=thread.id)
-   for message_data in reversed(messages.data):
-        last_message_content = message_data.content[-1]
-        print(f"{message_data.role}: {last_message_content.text.value}\n")
+   messages = agent_client.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
+   for message in messages:
+       if message.text_messages:
+           last_msg = message.text_messages[-1]
+           print(f"{message.role}: {last_msg.text.value}\n")
     ```
 
-1. Localize o comentário **Obter todos os arquivos** gerados e adicione o código a seguir para obter todas as anotações de caminho de arquivo das mensagens (que indicam que o agente salvou um arquivo em seu armazenamento interno) e copie os arquivos para a pasta do aplicativo.
+1. Localize o comentário **Obter todos os arquivos** gerados e adicione o código a seguir para obter todas as anotações de caminho de arquivo das mensagens (que indicam que o agente salvou um arquivo em seu armazenamento interno) e copie os arquivos para a pasta do aplicativo. _OBSERVAÇÃO:_ no momento, o conteúdo da imagem não está disponível pelo sistema.
 
     ```python
    # Get any generated files
-   for file_path_annotation in messages.file_path_annotations:
-        project_client.agents.save_file(file_id=file_path_annotation.file_path.file_id, file_name=Path(file_path_annotation.text).name)
-        print(f"File saved as {Path(file_path_annotation.text).name}")
+   for msg in messages:
+       # Save every image file in the message
+       for img in msg.image_contents:
+           file_id = img.image_file.file_id
+           file_name = f"{file_id}_image_file.png"
+           agent_client.files.save(file_id=file_id, file_name=file_name)
+           print(f"Saved image file to: {Path.cwd() / file_name}")
     ```
 
 1. Localize o comentário **Limpar** e adicione o código a seguir para excluir o agente e o thread quando não forem mais necessários.
 
     ```python
    # Clean up
-   project_client.agents.delete_agent(agent.id)
-   project_client.agents.delete_thread(thread.id)
+   agent_client.delete_agent(agent.id)
     ```
 
 1. Revise o código, usando os comentários para entender como:
