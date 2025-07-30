@@ -4,7 +4,7 @@ lab:
   description: Dê os primeiros passos no desenvolvimento de agentes de IA explorando o Serviço de Agente de IA do Azure no Portal da Fábrica de IA do Azure.
 ---
 
-# Explore o desenvolvimento do agente de I
+# Explore o desenvolvimento do Agente de IA
 
 Neste exercício, você usará o Serviço de Agente de IA do Azure no Portal da Fábrica de IA do Azure para criar um agente de IA simples que auxilia os funcionários em solicitações de despesas.
 
@@ -31,6 +31,10 @@ Vamos começar criando um projeto da Fábrica de IA do Azure.
     > \* Alguns recursos da IA do Azure são restritos por cotas de modelo regional. Caso um limite de cota seja excedido posteriormente no exercício, é possível que você precise criar outro recurso em uma região diferente.
 
 1. Clique em **Criar** e aguarde a criação do projeto.
+1. Se solicitado, implante um modelo **gpt-4o** usando o tipo de implantação **Global padrão** ou **Padrão** (dependendo da disponibilidade de cota) e personalize os detalhes da implantação para definir um **Limite de tokens por minuto** de 50 mil (ou o máximo disponível, se for inferior a 50 mil).
+
+    > **Observação**: A redução do TPM ajuda a evitar o uso excessivo da cota disponível na assinatura que você está usando. 50.000 TPM são suficientes para os dados usados neste exercício. Se a sua cota disponível for menor do que isso, você poderá concluir o exercício, mas poderá ocorrer erros se o limite de taxa for excedido.
+
 1. Quando o projeto for criado, o playground Agentes abrirá automaticamente para que você possa selecionar um implantar um modelo:
 
     ![Captura de tela do playground Agentes de um projeto da Fábrica de IA do Azure](./Media/ai-foundry-agents-playground.png)

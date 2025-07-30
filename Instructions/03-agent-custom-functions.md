@@ -6,9 +6,9 @@ lab:
 
 # Usar uma função personalizada em um agente de IA
 
-Neste exercício, você explorará a criação de um agente que pode usar funções personalizadas como uma ferramenta para concluir tarefas.
+Neste exercício, você explorará a criação de um agente que pode usar funções personalizadas como uma ferramenta para concluir tarefas. Você criará um agente de suporte técnico simples que pode coletar detalhes de um problema técnico e gerar um tíquete de suporte.
 
-Você criará um agente de suporte técnico simples que pode coletar detalhes de um problema técnico e gerar um tíquete de suporte.
+> **Dica**: O código usado neste exercício é baseado no SDK para Python da Fábrica de IA do Azure. Você pode desenvolver soluções semelhantes usando os SDKs para Microsoft .NET, JavaScript e Java. Consulte as [bibliotecas de clientes do SDK da Fábrica de IA do Azure](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) para obter mais detalhes.
 
 Este exercício deve levar aproximadamente **30** minutos para ser concluído.
 
@@ -33,19 +33,17 @@ Vamos começar criando um projeto da Fábrica de IA do Azure.
     > \* Alguns recursos da IA do Azure são restritos por cotas de modelo regional. Caso um limite de cota seja excedido posteriormente no exercício, é possível que você precise criar outro recurso em uma região diferente.
 
 1. Clique em **Criar** e aguarde a criação do projeto.
-1. Quando o projeto for criado, o playground Agentes abrirá automaticamente para que você possa selecionar um implantar um modelo:
+1. Se solicitado, implante um modelo **gpt-4o** usando a opção de implantação *Global Standard* ou *Standard* (dependendo da disponibilidade da sua cota).
 
-    ![Captura de tela do playground Agentes de um projeto da Fábrica de IA do Azure](./Media/ai-foundry-agents-playground.png)
+    >**Observação**: Se a cota estiver disponível, um modelo base GPT-4o poderá ser implantado automaticamente ao criar seu agente e projeto.
 
-    >**Observação**: um modelo base GPT-4o é implantado automaticamente ao criar o agente e o projeto.
+1. Quando o projeto for criado, o playground de agentes será aberto.
 
 1. No painel de navegação à esquerda, selecione **Visão geral** para ver a página principal do projeto, que será assim:
 
-    > **Observação**: se um erro de *permissões insuficientes** for exibido, use o botão **Corrigir** para resolvê-lo.
-
     ![Captura de tela de uma página de visão geral do projeto da Fábrica de IA do Azure.](./Media/ai-foundry-project.png)
 
-1. Copie o valor do **ponto de extremidade do projeto da Fábrica de IA do Azure** para um bloco de notas, pois você o usará para se conectar ao seu projeto em um aplicativo cliente.
+1. Copie os valores do **ponto de extremidade do projeto da Fábrica de IA do Azure** para um bloco de notas, pois você os usará para se conectar ao seu projeto em um aplicativo cliente.
 
 ## Desenvolver um agente que use ferramentas de função
 
@@ -105,7 +103,7 @@ Agora que você criou seu projeto na Fábrica de IA, vamos desenvolver um aplica
 
     O arquivo é aberto em um editor de código.
 
-1. No arquivo de código, substitua o espaço reservado **your_project_endpoint** pelo ponto de extremidade do projeto (copiado da página **Visão Geral** no portal da Fábrica de IA do Azure).
+1. No arquivo de código, substitua o espaço reservado **your_project_endpoint** pelo ponto de extremidade do seu projeto (copiado da página **Visão geral** do projeto no portal da Fábrica de IA do Azure) e verifique se a variável MODEL_DEPLOYMENT_NAME está definida com o nome da implantação do seu modelo (que deve ser *gpt-4o*).
 1. Depois de substituir o espaço reservado, use o comando **CTRL+S** para salvar suas alterações e, em seguida, use o comando **CTRL+Q** para fechar o editor de código, mantendo a linha de comando do Cloud Shell aberta.
 
 ### Definir uma função personalizada
@@ -245,7 +243,7 @@ Agora que você criou seu projeto na Fábrica de IA, vamos desenvolver um aplica
    print("\nConversation Log:\n")
    messages = agent_client.messages.list(thread_id=thread.id, order=ListSortOrder.ASCENDING)
    for message in messages:
-       if message.text_messages:
+        if message.text_messages:
            last_msg = message.text_messages[-1]
            print(f"{message.role}: {last_msg.text.value}\n")
     ```
