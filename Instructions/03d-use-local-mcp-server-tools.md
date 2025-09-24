@@ -24,7 +24,7 @@ Vamos começar criando um projeto da Fábrica de IA do Azure.
     - **Recurso da Fábrica de IA do Azure**: *um nome válido para o recurso da Fábrica de IA do Azure*
     - **Assinatura**: *sua assinatura do Azure*
     - **Grupo de recursos**: *criar ou selecionar um grupo de recursos*
-    - **Região**: *Selecione qualquer **Local compatível com os Serviços de IA***\*
+    - **Região**: *selecione qualquer **AI Foundry recomendado***\*
 
     > \* Alguns recursos da IA do Azure são restritos por cotas de modelo regional. Caso um limite de cota seja excedido posteriormente no exercício, é possível que você precise criar outro recurso em uma região diferente.
 
