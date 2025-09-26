@@ -29,7 +29,7 @@ Vamos começar implantando um modelo em um projeto da Fábrica de IA do Azure.
     - **Recurso da Fábrica de IA do Azure**: *um nome válido para o recurso da Fábrica de IA do Azure*
     - **Assinatura**: *sua assinatura do Azure*
     - **Grupo de recursos**: *criar ou selecionar um grupo de recursos*
-    - **Região**: *Selecione qualquer **Local compatível com os Serviços de IA***\*
+    - **Região**: *selecione qualquer **AI Foundry recomendado***\*
 
     > \* Alguns recursos da IA do Azure são restritos por cotas de modelo regional. Caso um limite de cota seja excedido posteriormente no exercício, é possível que você precise criar outro recurso em uma região diferente.
 
@@ -147,7 +147,7 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
 
     > **Observação**: a função *simula o* envio de um e-mail imprimindo-o no console. Em um aplicativo real, você usaria um serviço SMTP ou similar para realmente enviar o e-mail!
 
-1. Faça backup acima do novo código de classe **EmailPlugin**, na função **create_expense_claim**, localize o comentário **Get configuration settings** e adicione o código a seguir para carregar o arquivo de configuração e criar um objeto **AzureAIAgentSettings** (que incluirá automaticamente as definições do Agente de IA do Azure da configuração).
+1. Acima do novo código da classe **EmailPlugin**, na função **process_expenses_data**, localize o comentário **Get configuration settings** e adicione o seguinte código para carregar o arquivo de configuração e criar um objeto **AzureAIAgentSettings** (que incluirá automaticamente as configurações do Agente de IA do Azure do arquivo de configuração).
 
     (Certifique-se de manter o nível de recuo)
 
