@@ -1,14 +1,12 @@
 ---
 lab:
-  title: Desenvolva agentes de IA usando o Azure OpenAI e o SDK do Kernel Semântico
-  description: Saiba como usar o SDK do Kernel Semântico para criar e usar um agente de Serviço do Agente de IA do Azure.
+  title: Desenvolver um agente de IA do Azure com o SDK do Microsoft Agent Framework
+  description: Saiba como usar o SDK do Microsoft Agent Framework para criar e usar um agente de chat de IA do Azure.
 ---
 
-# Desenvolver agentes de IA do Azure com o SDK do Kernel Semântico
+# Desenvolver um agente de chat de IA do Azure com o SDK do Microsoft Agent Framework
 
-Neste exercício, você usará o Serviço de Agente de IA do Azure e o Kernel Semântico para criar um agente de IA que processa solicitações de despesas.
-
-> **Dica**: O código usado neste exercício baseia-se no SDK do Kernel Semântico para Python. Você pode desenvolver soluções semelhantes usando os SDKs para Microsoft .NET e Java. Consulte [Linguagens com suporte do Kernel Semântico](https://learn.microsoft.com/semantic-kernel/get-started/supported-languages) para mais detalhes.
+Neste exercício, você irá usar o serviço de agente de IA do Azure e o Microsoft Agent Framework para criar um agente de IA que processa solicitações de reembolso de despesas.
 
 Este exercício deve levar aproximadamente **30** minutos para ser concluído.
 
@@ -72,7 +70,7 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
 1. Quando o repositório tiver sido clonado, insira o comando a seguir para alterar o diretório de trabalho para a pasta que contém os arquivos de código e listar todos eles.
 
     ```
-   cd ai-agents/Labfiles/04-semantic-kernel/python
+   cd ai-agents/Labfiles/04-agent-framework/python
    ls -a -l
     ```
 
@@ -85,10 +83,8 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install python-dotenv azure-identity semantic-kernel --upgrade 
+   pip install azure-identity agent-framework
     ```
-
-    > **Observação**: A instalação do *semantic-kernel* instala automaticamente uma versão compatível com o Kernel Semântico do *azure-ai-projects*.
 
 1. Digite o seguinte comando para editar o arquivo de configuração que foi fornecido:
 
@@ -108,98 +104,60 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
 1. Digite o seguinte comando para editar o arquivo de código que foi fornecido:
 
     ```
-   code semantic-kernel.py
+   code agent-framework.py
     ```
 
 1. Examine o código no arquivo. Ele contém:
     - Algumas instruções **import** para adicionar referências a namespaces comumente usados
     - Uma função *main* que carrega um arquivo que contém dados de despesas, pede instruções ao usuário e, em seguida, chama...
     - Uma função **process_expenses_data** na qual o código para criar e usar seu agente deve ser adicionado
-    - Uma classe **EmailPlugin** que inclui uma função de kernel chamada **send_email**, que será usada pelo seu agente para simular a funcionalidade usada para enviar um email.
 
 1. Na parte superior do arquivo, após a instrução **importar** existente, localize o comentário **Adicionar referências** e adicione o seguinte código para fazer referência aos namespaces nas bibliotecas necessárias para implementar seu agente:
 
     ```python
    # Add references
-   from dotenv import load_dotenv
-   from azure.identity.aio import DefaultAzureCredential
-   from semantic_kernel.agents import AzureAIAgent, AzureAIAgentSettings, AzureAIAgentThread
-   from semantic_kernel.functions import kernel_function
+   from agent_framework import AgentThread, ChatAgent
+   from agent_framework.foundry import FoundryChatClient
+   from azure.identity.aio import AzureCliCredential
+   from pydantic import Field
    from typing import Annotated
     ```
 
-1. Próximo à parte inferior do arquivo, localize o comentário **Criar um plug-in para a funcionalidade** de e-mail e adicione o código a seguir para definir uma classe para um plug-in que contém uma função que seu agente usará para enviar e-mail (os plug-ins são uma maneira de adicionar funcionalidade personalizada aos agentes do Kernel Semântico)
+1. Próximo à parte inferior do arquivo, localize o comentário **Create a tool function for the email functionality** e adicione o código a seguir para definir uma função que seu agente usará para enviar emails (as ferramentas são uma forma de adicionar funcionalidades personalizadas aos agentes)
 
     ```python
-   # Create a Plugin for the email functionality
-   class EmailPlugin:
-       """A Plugin to simulate email functionality."""
-    
-       @kernel_function(description="Sends an email.")
-       def send_email(self,
-                      to: Annotated[str, "Who to send the email to"],
-                      subject: Annotated[str, "The subject of the email."],
-                      body: Annotated[str, "The text body of the email."]):
-           print("\nTo:", to)
-           print("Subject:", subject)
-           print(body, "\n")
+   # Create a tool function for the email functionality
+   def send_email(
+    to: Annotated[str, Field(description="Who to send the email to")],
+    subject: Annotated[str, Field(description="The subject of the email.")],
+    body: Annotated[str, Field(description="The text body of the email.")]):
+        print("\nTo:", to)
+        print("Subject:", subject)
+        print(body, "\n")
     ```
 
     > **Observação**: a função *simula o* envio de um e-mail imprimindo-o no console. Em um aplicativo real, você usaria um serviço SMTP ou similar para realmente enviar o e-mail!
 
-1. Acima do novo código da classe **EmailPlugin**, na função **process_expenses_data**, localize o comentário **Get configuration settings** e adicione o seguinte código para carregar o arquivo de configuração e criar um objeto **AzureAIAgentSettings** (que incluirá automaticamente as configurações do Agente de IA do Azure do arquivo de configuração).
+1. Acima do código **send_email**, na função **process_expenses_data**, localize o comentário **Create a chat agent** e adicione o código a seguir para criar um objeto **ChatAgent** com as ferramentas e instruções.
 
     (Certifique-se de manter o nível de recuo)
 
     ```python
-   # Get configuration settings
-   load_dotenv()
-   ai_agent_settings = AzureAIAgentSettings()
-    ```
-
-1. Encontre o comentário **Conectar-se à Fábrica de IA do Azure**, e adicione o seguinte código para se conectar ao seu projeto da Fábrica de IA do Azure usando as credenciais do Azure com as quais você está atualmente conectado.
-
-    (Certifique-se de manter o nível de recuo)
-
-    ```python
-   # Connect to the Azure AI Foundry project
+   # Create a chat agent
    async with (
-        DefaultAzureCredential(
-            exclude_environment_credential=True,
-            exclude_managed_identity_credential=True) as creds,
-        AzureAIAgent.create_client(
-            credential=creds
-        ) as project_client,
+       AzureCliCredential() as credential,
+       ChatAgent(
+           chat_client=FoundryChatClient(async_credential=credential),
+           name="expenses_agent",
+           instructions="""You are an AI assistant for expense claim submission.
+                           When a user submits expenses data and requests an expense claim, use the plug-in function to send an email to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total.
+                           Then confirm to the user that you've done so.""",
+           tools=send_email,
+       ) as agent,
    ):
     ```
 
-1. Localize o comentário **Definir um agente de IA do Azure que envia um email** de relatório de despesas e adicione o código a seguir para criar uma definição de Agente de IA do Azure para seu agente.
-
-    (Certifique-se de manter o nível de recuo)
-
-    ```python
-   # Define an Azure AI agent that sends an expense claim email
-   expenses_agent_def = await project_client.agents.create_agent(
-        model= ai_agent_settings.model_deployment_name,
-        name="expenses_agent",
-        instructions="""You are an AI assistant for expense claim submission.
-                        When a user submits expenses data and requests an expense claim, use the plug-in function to send an email to expenses@contoso.com with the subject 'Expense Claim`and a body that contains itemized expenses with a total.
-                        Then confirm to the user that you've done so."""
-   )
-    ```
-
-1. Localize o comentário **Criar um agente de kernel semântico** e adicione o código a seguir para criar um objeto de agente de kernel semântico para o agente de IA do Azure e inclua uma referência ao plug-in **EmailPlugin**.
-
-    (Certifique-se de manter o nível de recuo)
-
-    ```python
-   # Create a semantic kernel agent
-   expenses_agent = AzureAIAgent(
-        client=project_client,
-        definition=expenses_agent_def,
-        plugins=[EmailPlugin()]
-   )
-    ```
+    Observe que o objeto **AzureCliCredential** incluirá automaticamente as configurações de projeto da Fábrica de IA do Azure a partir da configuração.
 
 1. Localize o comentário **Use the agent to process the expenses data** e adicione o código a seguir para criar um thread para o agente executar e, em seguida, invoque-o com uma mensagem de chat.
 
@@ -207,23 +165,16 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
 
     ```python
    # Use the agent to process the expenses data
-   # If no thread is provided, a new thread will be
-   # created and returned with the initial response
-   thread: AzureAIAgentThread | None = None
    try:
-        # Add the input prompt to a list of messages to be submitted
-        prompt_messages = [f"{prompt}: {expenses_data}"]
-        # Invoke the agent for the specified thread with the messages
-        response = await expenses_agent.get_response(prompt_messages, thread=thread)
-        # Display the response
-        print(f"\n# {response.name}:\n{response}")
+       # Add the input prompt to a list of messages to be submitted
+       prompt_messages = [f"{prompt}: {expenses_data}"]
+       # Invoke the agent for the specified thread with the messages
+       response = await agent.run(prompt_messages)
+       # Display the response
+       print(f"\n# {response.name}:\n{response}")
    except Exception as e:
-        # Something went wrong
-        print (e)
-   finally:
-        # Cleanup: Delete the thread and agent
-        await thread.delete() if thread else None
-        await project_client.agents.delete_agent(expenses_agent.id)
+       # Something went wrong
+       print (e)
     ```
 
 1. Revise o código completado pelo agente, usando os comentários para ajudar você a entender o que cada bloco de código faz e, em seguida, salve as alterações de código (**CTRL+S**).
@@ -245,7 +196,7 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
 1. Depois de entrar, insira o seguinte comando para executar o aplicativo:
 
     ```
-   python semantic-kernel.py
+   python agent-framework.py
     ```
     
     O aplicativo será executado usando as credenciais da sessão autenticada do Azure para se conectar ao seu projeto e criar e executar o agente.
@@ -262,7 +213,7 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
 
 ## Resumo
 
-Neste exercício, você usou o SDK do Serviço do Agente de IA do Azure e o Kernel Semântico para criar um agente.
+Neste exercício, você usou o SDK do Microsoft Agent Framework para criar um agente com uma ferramenta personalizada.
 
 ## Limpar
 

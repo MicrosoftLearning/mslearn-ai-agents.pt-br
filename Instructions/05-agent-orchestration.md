@@ -1,20 +1,18 @@
 ---
 lab:
-  title: Desenvolva uma solução multiagente com o Kernel Semântico
-  description: Saiba como configurar vários agentes para colaborar usando o SDK do Semantic Kernel
+  title: Desenvolver uma solução de vários agentes com o Microsoft Agent Framework
+  description: Saiba como a configurar vários agentes para colaborar usando o SDK do Microsoft Agent Framework
 ---
 
 # Desenvolva uma solução multiagente
 
-Neste exercício, você irá praticar o uso do padrão de orquestração sequencial no SDK do Kernel Semântico. Você criará um pipeline simples com três agentes que trabalham juntos para processar o feedback do cliente e sugerir as próximas etapas. Você irá criar os seguintes agentes:
+Neste exercício, você irá praticar o uso do padrão de orquestração sequencial no SDK do Microsoft Agent Framework. Você criará um pipeline simples com três agentes que trabalham juntos para processar o feedback do cliente e sugerir as próximas etapas. Você irá criar os seguintes agentes:
 
 - O agente Summarizer vai condensar o feedback bruto em uma frase curta e neutra.
 - O agente Classifier vai categorizar o feedback como Positivo, Negativo ou Solicitação de recurso.
 - Por fim, o agente Recommended Action vai recomendar a etapa de acompanhamento adequada.
 
-Você aprenderá a usar o SDK do Kernel Semântico para dividir um problema, direcioná-lo aos agentes certos e gerar resultados acionáveis. Vamos começar!
-
-> **Dica**: O código usado neste exercício baseia-se no SDK do Kernel Semântico para Python. Você pode desenvolver soluções semelhantes usando os SDKs para Microsoft .NET e Java. Consulte [Linguagens com suporte do Kernel Semântico](https://learn.microsoft.com/semantic-kernel/get-started/supported-languages) para mais detalhes.
+Você irá aprender a usar o SDK do Microsoft Agent Framework para decompor um problema, encaminhá-lo para os agentes certos e gerar resultados acionáveis. Vamos começar!
 
 Este exercício deve levar aproximadamente **30** minutos para ser concluído.
 
@@ -95,10 +93,8 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install python-dotenv azure-identity semantic-kernel --upgrade
+   pip install azure-identity agent-framework
     ```
-
-    > **Observação**: A instalação do *semantic-kernel* instala automaticamente uma versão compatível com o Kernel Semântico do *azure-ai-projects*.
 
 1. Digite o seguinte comando para editar o arquivo de configuração fornecido:
 
@@ -108,7 +104,7 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
 
     O arquivo é aberto em um editor de código.
 
-1. No arquivo de código, substitua o espaço reservado **your_openai_endpoint** pelo ponto de extremidade do OpenAI do Azure de seu projeto (copiado da página **Visão geral** no portal da Fábrica de IA do Azure, em **OpenAI do Azure**). Substitua **your_openai_api_key** pela Chave de API do projeto e verifique se a variável MODEL_DEPLOYMENT_NAME está definida como o nome da implantação do modelo (que deve ser *gpt-4o*).
+1. No arquivo de código, substitua o espaço reservado **your_openai_endpoint** pelo ponto de extremidade do projeto (copiado da página **Visão geral** do projeto no portal da Fábrica de IA do Azure). Substitua o espaço reservado **your_model_deployment** pelo nome atribuído à implantação do modelo gpt-4o.
 
 1. Depois de substituir os espaços reservados, use o comando **CTRL+S** para salvar suas alterações e, em seguida, use o comando **CTRL+Q** para fechar o editor de código, mantendo a linha de comando do Cloud Shell aberta.
 
@@ -127,130 +123,86 @@ Agora você está pronto para criar os agentes para sua solução multiagente! V
     ```python
    # Add references
    import asyncio
-   from semantic_kernel.agents import Agent, ChatCompletionAgent, SequentialOrchestration
-   from semantic_kernel.agents.runtime import InProcessRuntime
-   from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
-   from semantic_kernel.contents import ChatMessageContent
+   from typing import cast
+   from agent_framework import ChatMessage, Role, SequentialBuilder, WorkflowOutputEvent
+   from agent_framework.azure import AzureOpenAIChatClient
+   from azure.identity import AzureCliCredential
     ```
 
+1. Na função **main**, reserve um momento para examinar as instruções do agente. Essas instruções definem o comportamento de cada agente na orquestração.
 
-1. Na função **get_agents**, adicione o seguinte código sob o comentário **Create a summarizer agent**:
+1. Adicione o seguinte código sob o comentário **Create the chat client**:
 
     ```python
-   # Create a summarizer agent
-   summarizer_agent = ChatCompletionAgent(
-       name="SummarizerAgent",
-       instructions="""
-       Summarize the customer's feedback in one short sentence. Keep it neutral and concise.
-       Example output:
-       App crashes during photo upload.
-       User praises dark mode feature.
-       """,
-       service=AzureChatCompletion(),
+   # Create the chat client
+   chat_client = AzureOpenAIChatClient(credential=AzureCliCredential())
+    ```
+
+1. Adicione o seguinte código sob o comentário **Create agents**:
+
+    ```python
+   # Create agents
+   summarizer = chat_client.create_agent(
+       instructions=summarizer_instructions,
+       name="summarizer",
+   )
+
+   classifier = chat_client.create_agent(
+       instructions=classifier_instructions,
+       name="classifier",
+   )
+
+   action = chat_client.create_agent(
+       instructions=action_instructions,
+       name="action",
    )
     ```
-
-1. Adicione o seguinte código sob o comentário **Create a classifier agent**:
-
-    ```python
-   # Create a classifier agent
-   classifier_agent = ChatCompletionAgent(
-       name="ClassifierAgent",
-       instructions="""
-       Classify the feedback as one of the following: Positive, Negative, or Feature request.
-       """,
-       service=AzureChatCompletion(),
-   )
-    ```
-
-1. Adicione o seguinte código sob o comentário **Create a recommended action agent**:
-
-    ```python
-   # Create a recommended action agent
-   action_agent = ChatCompletionAgent(
-       name="ActionAgent",
-       instructions="""
-       Based on the summary and classification, suggest the next action in one short sentence.
-       Example output:
-       Escalate as a high-priority bug for the mobile team.
-       Log as positive feedback to share with design and marketing.
-       Log as enhancement request for product backlog.
-       """,
-       service=AzureChatCompletion(),
-   )
-    ```
-
-1. Adicione o seguinte código sob o comentário **Return a list of agents**:
-
-    ```python
-   # Return a list of agents
-   return [summarizer_agent, classifier_agent, action_agent]
-    ```
-
-    A ordem dos agentes nesta lista será a ordem em que eles serão selecionados durante a orquestração.
 
 ## Criar uma orquestração sequencial
 
-1. Na função **main**, localize o comentário **Initialize the input task** e adicione o seguinte código:
+1. Na função **main**, localize o comentário **Initialize the current feedback** e adicione o seguinte código:
     
     ```python
-   # Initialize the input task
-   task="""
-   I tried updating my profile picture several times today, but the app kept freezing halfway through the process. 
-   I had to restart it three times, and in the end, the picture still wouldn't upload. 
-   It's really frustrating and makes the app feel unreliable.
+   # Initialize the current feedback
+   feedback="""
+   I use the dashboard every day to monitor metrics, and it works well overall. 
+   But when I'm working late at night, the bright screen is really harsh on my eyes. 
+   If you added a dark mode option, it would make the experience much more comfortable.
    """
     ```
 
-1. No comentário **Create a sequential orchestration**, adicione o seguinte código para definir uma orquestração sequencial com um retorno de chamada de resposta:
+1. No comentário **Build a sequential orchestration**, adicione o seguinte código para definir uma orquestração sequencial com os agentes que você definiu:
 
     ```python
-   # Create a sequential orchestration
-   sequential_orchestration = SequentialOrchestration(
-       members=get_agents(),
-       agent_response_callback=agent_response_callback,
-   )
+   # Build sequential orchestration
+    workflow = SequentialBuilder().participants([summarizer, classifier, action]).build()
     ```
 
-    O `agent_response_callback` irá permitir que você exiba a resposta de cada agente durante a orquestração.
+    Os agentes processarão o feedback na ordem em que forem adicionados à orquestração.
 
-1. Adicione o seguinte código sob o comentário **Create a runtime and start it**:
+1. Adicione o seguinte código sob o comentário **Run and collect outputs**:
 
     ```python
-   # Create a runtime and start it
-   runtime = InProcessRuntime()
-   runtime.start()
+   # Run and collect outputs
+   outputs: list[list[ChatMessage]] = []
+   async for event in workflow.run_stream(f"Customer feedback: {feedback}"):
+       if isinstance(event, WorkflowOutputEvent):
+           outputs.append(cast(list[ChatMessage], event.data))
     ```
 
-1. Adicione o seguinte código sob o comentário **Invoke the orchestration with a task and the runtime**:
+    Esse código executa a orquestração e coleta a saída de cada um dos agentes participantes.
+
+1. Adicione o seguinte código sob o comentário **Display outputs**:
 
     ```python
-   # Invoke the orchestration with a task and the runtime
-   orchestration_result = await sequential_orchestration.invoke(
-       task=task,
-       runtime=runtime,
-   )
+   # Display outputs
+   if outputs:
+       for i, msg in enumerate(outputs[-1], start=1):
+           name = msg.author_name or ("assistant" if msg.role == Role.ASSISTANT else "user")
+           print(f"{'-' * 60}\n{i:02d} [{name}]\n{msg.text}")
     ```
 
-1. Adicione o seguinte código sob o comentário **Wait for the results**:
-
-    ```python
-   # Wait for the results
-   value = await orchestration_result.get(timeout=20)
-   print(f"\n****** Task Input ******{task}")
-   print(f"***** Final Result *****\n{value}")
-    ```
-
-    Neste código, você recupera e exibe o resultado da orquestração. Se a orquestração não for concluída dentro do tempo limite especificado, será gerada uma exceção de tempo limite.
-
-1. Localize o comentário **Stop the runtime when idle** e adicione o seguinte código:
-
-    ```python
-   # Stop the runtime when idle
-   await runtime.stop_when_idle()
-    ```
-
-    Após a conclusão do processamento, interrompa o runtime para liberar os recursos.
+    Esse código formata e exibe as mensagens das saídas do fluxo de trabalho coletadas da orquestração.
 
 1. Use o comando **CTRL+S** para salvar suas alterações no arquivo de código. Você pode mantê-lo aberto (caso precise editar o código para corrigir erros) ou usar o comando **CTRL+Q** para fechar o editor de código enquanto mantém a linha de comando do cloud shell aberta.
 
@@ -279,23 +231,25 @@ Agora você está pronto para executar seu código e ver seus agentes de IA cola
     Você verá algo semelhante à seguinte saída:
 
     ```output
-    # SummarizerAgent
-    App freezes during profile picture upload, preventing completion.
-    # ClassifierAgent
-    Negative
-    # ActionAgent
-    Escalate as a high-priority bug for the development team.
+    ------------------------------------------------------------
+    01 [user]
+    Customer feedback:
+        I use the dashboard every day to monitor metrics, and it works well overall.
+        But when I'm working late at night, the bright screen is really harsh on my eyes.
+        If you added a dark mode option, it would make the experience much more comfortable.
 
-    ****** Task Input ******
-    I tried updating my profile picture several times today, but the app kept freezing halfway through the process.
-    I had to restart it three times, and in the end, the picture still wouldn't upload.
-    It's really frustrating and makes the app feel unreliable.
-
-    ***** Final Result *****
-    Escalate as a high-priority bug for the development team.
+    ------------------------------------------------------------
+    02 [summarizer]
+    User requests a dark mode for better nighttime usability.
+    ------------------------------------------------------------
+    03 [classifier]
+    Feature request
+    ------------------------------------------------------------
+    04 [action]
+    Log as enhancement request for product backlog.
     ```
 
-1. Opcionalmente, você pode tentar executar o código usando diferentes entradas de tarefa, como:
+1. Opcionalmente, você pode tentar executar o código usando diferentes entradas de feedback, como:
 
     ```output
     I use the dashboard every day to monitor metrics, and it works well overall. But when I'm working late at night, the bright screen is really harsh on my eyes. If you added a dark mode option, it would make the experience much more comfortable.
@@ -306,7 +260,7 @@ Agora você está pronto para executar seu código e ver seus agentes de IA cola
 
 ## Resumo
 
-Neste exercício, você praticou a orquestração sequencial com o SDK do Kernel Semântico, combinando vários agentes em um único fluxo de trabalho simplificado. Ótimo trabalho!
+Neste exercício, você praticou a orquestração sequencial com o SDK do Microsoft Agent Framework, combinando vários agentes em um único fluxo de trabalho simplificado. Ótimo trabalho!
 
 ## Limpar
 
