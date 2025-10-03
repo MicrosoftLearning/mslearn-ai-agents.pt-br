@@ -125,7 +125,7 @@ Agora você está pronto para criar os agentes para sua solução multiagente! V
    import asyncio
    from typing import cast
    from agent_framework import ChatMessage, Role, SequentialBuilder, WorkflowOutputEvent
-   from agent_framework.azure import AzureOpenAIChatClient
+   from agent_framework.azure import AzureAIAgentClient
    from azure.identity import AzureCliCredential
     ```
 
@@ -135,10 +135,15 @@ Agora você está pronto para criar os agentes para sua solução multiagente! V
 
     ```python
    # Create the chat client
-   chat_client = AzureOpenAIChatClient(credential=AzureCliCredential())
+   credential = AzureCliCredential()
+   async with (
+       AzureAIAgentClient(async_credential=credential) as chat_client,
+   ):
     ```
 
 1. Adicione o seguinte código sob o comentário **Create agents**:
+
+    (Certifique-se de manter o nível de recuo)
 
     ```python
    # Create agents
@@ -162,6 +167,8 @@ Agora você está pronto para criar os agentes para sua solução multiagente! V
 
 1. Na função **main**, localize o comentário **Initialize the current feedback** e adicione o seguinte código:
     
+    (Certifique-se de manter o nível de recuo)
+
     ```python
    # Initialize the current feedback
    feedback="""
@@ -175,7 +182,7 @@ Agora você está pronto para criar os agentes para sua solução multiagente! V
 
     ```python
    # Build sequential orchestration
-    workflow = SequentialBuilder().participants([summarizer, classifier, action]).build()
+   workflow = SequentialBuilder().participants([summarizer, classifier, action]).build()
     ```
 
     Os agentes processarão o feedback na ordem em que forem adicionados à orquestração.
