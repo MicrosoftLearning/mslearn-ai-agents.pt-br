@@ -141,6 +141,8 @@ Agora você está pronto para criar os agentes para sua solução multiagente! V
    ):
     ```
 
+    Observe que o objeto **AzureCliCredential** permitirá que o código seja autenticado em sua conta do Azure. O objeto **AzureAIAgentClient** incluirá automaticamente as configurações de projeto da Fábrica de IA do Azure a partir da configuração de .env.
+
 1. Adicione o seguinte código sob o comentário **Create agents**:
 
     (Certifique-se de manter o nível de recuo)

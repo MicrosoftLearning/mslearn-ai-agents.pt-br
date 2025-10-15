@@ -157,7 +157,7 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
    ):
     ```
 
-    Observe que o objeto **AzureCliCredential** incluirá automaticamente as configurações de projeto da Fábrica de IA do Azure a partir da configuração.
+    Observe que o objeto **AzureCliCredential** permitirá que o código seja autenticado em sua conta do Azure. O objeto **AzureAIAgentClient** incluirá automaticamente as configurações de projeto da Fábrica de IA do Azure a partir da configuração de .env.
 
 1. Localize o comentário **Use the agent to process the expenses data** e adicione o código a seguir para criar um thread para o agente executar e, em seguida, invoque-o com uma mensagem de chat.
 
