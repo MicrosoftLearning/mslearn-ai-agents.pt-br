@@ -68,7 +68,7 @@ Você precisará de um modelo implantado para usar com seu agente.
 
 1. No Catálogo de modelos, localize o modelo **gpt-4o** (você pode usar a barra de pesquisa para encontrá-lo rapidamente).
 
-    ![Captura de tela do Catálogo de modelos na extensão do VS Code da Fábrica de IA do Azure.](media/vs-code-model.png)
+    ![Captura de tela do Catálogo de modelos na extensão do VS Code da Fábrica de IA do Azure.](Media/vs-code-model.png)
 
 1. Selecione **Implantar no Azure** ao lado do modelo gpt-4o.
 
@@ -92,7 +92,7 @@ Agora você criará um agente de IA usando a interface do designer visual.
 
 1. Selecione o ícone **+** (mais) ao lado da subseção **Agents** para criar um novo Agente de IA.
 
-    ![Captura de tela de uma criação de um agente na extensão do VS Code da Fábrica de IA do Azure.](media/vs-code-new-agent.png)
+    ![Captura de tela de uma criação de um agente na extensão do VS Code da Fábrica de IA do Azure.](Media/vs-code-new-agent.png)
 
 1. Escolha um local para salvar os arquivos do agente quando solicitado.
 
@@ -117,7 +117,7 @@ Agora você adicionará uma ferramenta de servidor MCP (Protocolo de Contexto de
 
 1. Na seção **FERRAMENTA** do designer, selecione o botão **Adicionar ferramenta** no canto superior direito.
 
-![Captura de tela da adição de uma ferramenta a um agente na extensão do VS Code da Fábrica de IA do Azure.](media/vs-code-agent-tools.png)
+![Captura de tela da adição de uma ferramenta a um agente na extensão do VS Code da Fábrica de IA do Azure.](Media/vs-code-agent-tools.png)
 
 1. No menu suspenso, escolha **Servidor MCP**.
 
