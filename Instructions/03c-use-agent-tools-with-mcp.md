@@ -6,7 +6,7 @@ lab:
 
 # Conectar agentes de IA a ferramentas usando o Protocolo MCP (Protocolo de Contexto de Modelo)
 
-Neste exercício, você criará um agente que se conecta a um servidor MCP hospedado na nuvem. O agente usará a pesquisa baseada em IA para ajudar os desenvolvedores a encontrar respostas precisas e em tempo real na documentação oficial da Microsoft. Isso é útil para criar assistentes que dão suporte a desenvolvedores com diretrizes atualizadas sobre ferramentas como Azure, .NET e Microsoft 365. O agente usará a ferramenta `microsoft_docs_search` fornecida para consultar a documentação e retornar resultados relevantes.
+Neste exercício, você criará um agente que se conecta a um servidor MCP hospedado na nuvem. O agente usará a pesquisa baseada em IA para ajudar os desenvolvedores a encontrar respostas precisas e em tempo real na documentação oficial da Microsoft. Isso é útil para criar assistentes que dão suporte a desenvolvedores com diretrizes atualizadas sobre ferramentas como Azure, .NET e Microsoft 365. O agente usará as ferramentas MCP disponíveis para consultar a documentação e oferecer resultados relevantes.
 
 > **Dica**: O código usado neste exercício baseia-se no exemplo repositório de suporte do MCP de serviço do Agente de IA do Azure. Confira as [demonstrações do Azure OpenAI](https://github.com/retkowsky/Azure-OpenAI-demos/blob/main/Azure%20Agent%20Service/9%20Azure%20AI%20Agent%20service%20-%20MCP%20support.ipynb) ou visite [Conectar-se a servidores do Protocolo de Contexto de Modelo](https://learn.microsoft.com/en-us/azure/ai-foundry/agents/how-to/tools/model-context-protocol) para obter mais detalhes.
 
@@ -261,7 +261,7 @@ Nesta tarefa, você vai se conectar a um servidor MCP remoto, preparar o agente 
     MCP Tool calls:
         Tool Call ID: <<tool-call-id>>
         Type: mcp
-        Type: microsoft_docs_search
+        Type: microsoft_code_sample_search
 
 
     Conversation:
@@ -285,7 +285,7 @@ Nesta tarefa, você vai se conectar a um servidor MCP remoto, preparar o agente 
     Deleted agent
     ```
 
-    Observe que o agente foi capaz de invocar a ferramenta MCP `microsoft_docs_search` automaticamente para atender à solicitação.
+    Observe que o agente foi capaz de invocar a ferramenta MCP `microsoft_code_sample_search` automaticamente para atender à solicitação.
 
 1. Você pode executar o aplicativo novamente (usando o comando `python client.py`) para solicitar informações diferentes. Em cada caso, o agente tentará localizar a documentação técnica usando a ferramenta MCP.
 
