@@ -94,7 +94,7 @@ Agora que você criou seu projeto na Fábrica de IA, vamos desenvolver um aplica
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt --pre azure-ai-projects mcp
+   pip install -r requirements.txt --pre azure-ai-projects azure-ai-agents mcp
     ```
 
     >**Observação:** você pode ignorar qualquer mensagem de aviso ou erro exibida durante a instalação da biblioteca.
