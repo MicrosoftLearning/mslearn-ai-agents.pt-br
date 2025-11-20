@@ -108,7 +108,7 @@ Agora você está pronto para criar um aplicativo cliente que usa um agente. Alg
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt azure-ai-projects a2a-sdk
+   pip install -r requirements.txt azure-ai-projects azure-ai-agents a2a-sdk
     ```
 
 1. Digite o seguinte comando para editar o arquivo de configuração que foi fornecido:

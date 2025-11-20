@@ -90,7 +90,7 @@ Agora você está pronto para criar um aplicativo cliente que define os agentes 
     ```
    python -m venv labenv
    ./labenv/bin/Activate.ps1
-   pip install -r requirements.txt azure-ai-projects
+   pip install -r requirements.txt azure-ai-projects azure-ai-agents
     ```
 
 1. Digite o seguinte comando para editar o arquivo de configuração fornecido:
