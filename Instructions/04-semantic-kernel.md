@@ -12,19 +12,21 @@ Este exercício deve levar aproximadamente **30** minutos para ser concluído.
 
 > **Observação**: algumas das tecnologias usadas neste exercício estão em versão prévia ou em desenvolvimento ativo. Você pode observar algum comportamento, avisos ou erros inesperados.
 
-## Implantar um modelo em um projeto da Fábrica de IA do Azure
+## Implantar um modelo em um projeto da Fábrica da Microsoft
 
-Vamos começar implantando um modelo em um projeto da Fábrica de IA do Azure.
+Vamos começar implantando um modelo em um projeto da Fábrica.
 
-1. Em um navegador da Web, abra o [Portal da Fábrica de IA do Azure](https://ai.azure.com) em `https://ai.azure.com` e entre usando suas credenciais do Azure. Feche todas as dicas ou painéis de início rápido abertos na primeira vez que você entrar e, se necessário, use o logotipo da **Fábrica de IA do Azure** no canto superior esquerdo para navegar até a home page, que é semelhante à imagem a seguir (feche o painel **Ajuda** se estiver aberto):
+1. Em um navegador da Web, abra o [portal da Fábrica](https://ai.azure.com) em `https://ai.azure.com` e entre usando suas credenciais do Azure. Feche todas as dicas ou painéis de início rápido abertos na primeira vez que você entrar e, se necessário, use o logotipo da **Fábrica** no canto superior esquerdo para navegar até a home page, que é semelhante à imagem a seguir (feche o painel **Ajuda** se estiver aberto):
 
-    ![Captura de tela do portal do Azure AI Foundry.](./Media/ai-foundry-home.png)
+    ![Captura de tela do portal da Fábrica.](./Media/ai-foundry-home.png)
+
+    > **Importante**: Verifique se a alternância **Nova Fábrica** está *desativada* para este laboratório.
 
 1. Na home page, na seção **Explorar modelos e funcionalidades**, pesquise pelo modelo `gpt-4o`, que usaremos em nosso projeto.
 1. Nos resultados da pesquisa, selecione o modelo **gpt-4o** para ver os detalhes e, na parte superior da página do modelo, clique em **Usar este modelo**.
 1. Quando solicitado a criar um projeto, insira um nome válido para o projeto e expanda **Opções avançadas**.
 1. Confirme as seguintes configurações do projeto:
-    - **Recurso da Fábrica de IA do Azure**: *um nome válido para o recurso da Fábrica de IA do Azure*
+    - **Recurso Fábrica**: *Um nome válido para o recurso Fábrica*
     - **Assinatura**: *sua assinatura do Azure*
     - **Grupo de recursos**: *criar ou selecionar um grupo de recursos*
     - **Região**: *selecione qualquer **AI Foundry recomendado***\*
@@ -36,7 +38,7 @@ Vamos começar implantando um modelo em um projeto da Fábrica de IA do Azure.
 1. No painel **Configuração**, anote o nome da implantação do modelo; que será **gpt-4o**. Você pode confirmar isso visualizando a implantação na página **Modelos e pontos de extremidade** (basta abrir essa página no painel de navegação à esquerda).
 1. No painel de navegação à esquerda, selecione **Visão geral** para ver a página principal do projeto, que será assim:
 
-    ![Captura de tela dos detalhes de um projeto IA do Azure no Portal da Fábrica de IA do Azure.](./Media/ai-foundry-project.png)
+    ![Captura de tela dos detalhes de um projeto de IA do Azure no portal da Fábrica.](./Media/ai-foundry-project.png)
 
 ## Criar um aplicativo cliente do agente
 
@@ -44,7 +46,7 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
 
 ### Preparar o ambiente
 
-1. Abra uma nova guia do navegador (mantendo o portal da Fábrica de IA do Azure aberto na guia existente). Em seguida, na nova guia, navegue até o [portal do Azure](https://portal.azure.com) em `https://portal.azure.com`; efetue login com suas credenciais do Azure, se solicitado.
+1. Abra uma nova guia do navegador (mantendo o portal da Fábrica aberto na guia existente). Em seguida, na nova guia, navegue até o [portal do Azure](https://portal.azure.com) em `https://portal.azure.com`; efetue login com suas credenciais do Azure, se solicitado.
 
     Feche todas as notificações de boas-vindas para ver a home page do portal do Azure.
 
@@ -94,7 +96,7 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
 
     O arquivo é aberto em um editor de código.
 
-1. No arquivo de código, substitua o espaço reservado **your_project_endpoint** pelo ponto de extremidade do projeto (copiado da página **Visão Geral** do projeto no portal da Fábrica de IA do Azure) e o espaço reservado **your_model_deployment** pelo nome que você atribuiu à implantação do modelo gpt-4.
+1. No arquivo de código, substitua o espaço reservado **your_project_endpoint** pelo ponto de extremidade do projeto (copiado da página **Visão Geral** do projeto no portal da Fábrica) e o espaço reservado **your_model_deployment** pelo nome que você atribuiu à implantação do modelo gpt-4o.
 1. Depois de substituir os espaços reservados, use o comando **CTRL+S** para salvar suas alterações e, em seguida, use o comando **CTRL+Q** para fechar o editor de código, mantendo a linha de comando do Cloud Shell aberta.
 
 ### Escrever código para um aplicativo de agente
@@ -157,7 +159,7 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
    ):
     ```
 
-    Observe que o objeto **AzureCliCredential** permitirá que o código seja autenticado em sua conta do Azure. O objeto **AzureAIAgentClient** incluirá automaticamente as configurações de projeto da Fábrica de IA do Azure a partir da configuração de .env.
+    Observe que o objeto **AzureCliCredential** permitirá que o código seja autenticado em sua conta do Azure. O objeto **AzureAIAgentClient** incluirá automaticamente as configurações do projeto da Fábrica da configuração .env.
 
 1. Localize o comentário **Use the agent to process the expenses data** e adicione o código a seguir para criar um thread para o agente executar e, em seguida, invoque-o com uma mensagem de chat.
 
@@ -192,7 +194,7 @@ Agora você está pronto para criar um aplicativo cliente que define um agente e
 
     > **Observação**: na maioria dos cenários, apenas usar *az login* será suficiente. No entanto, se você tiver assinaturas em vários locatários, talvez seja necessário especificar o locatário usando o parâmetro *--tenant* . Consulte [Entrar no Azure interativamente usando a CLI do Azure](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) para obter detalhes.
     
-1. Quando solicitado, siga as instruções para abrir a página de entrada em uma nova guia e insira o código de autenticação fornecido e suas credenciais do Azure. Em seguida, conclua o processo de entrada na linha de comando, selecionando a assinatura que contém o hub da Fábrica de IA do Azure, se solicitado.
+1. Quando solicitado, siga as instruções para abrir a página de entrada em uma nova guia e insira o código de autenticação fornecido e suas credenciais do Azure. Em seguida, conclua o processo de entrada na linha de comando, selecionando a assinatura que contém o hub da Fábrica, se solicitado.
 1. Depois de entrar, insira o seguinte comando para executar o aplicativo:
 
     ```

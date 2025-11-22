@@ -8,24 +8,26 @@ lab:
 
 Neste exercício, você usará o Serviço de Agente de IA do Azure para criar um agente simples que analisa dados e cria gráficos. O agente pode usar a ferramenta integrada **Intérprete de Código* para gerar dinamicamente qualquer código necessário para analisar dados.
 
-> **Dica**: O código usado neste exercício é baseado no SDK para Python da Fábrica de IA do Azure. Você pode desenvolver soluções semelhantes usando os SDKs para Microsoft .NET, JavaScript e Java. Consulte as [bibliotecas de clientes do SDK da Fábrica de IA do Azure](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) para obter mais detalhes.
+> **Dica**: O código usado neste exercício é baseado no SDK para Python da Fábrica da Microsoft. Você pode desenvolver soluções semelhantes usando os SDKs para Microsoft .NET, JavaScript e Java. Consulte as [bibliotecas de clientes do SDK da Fábrica da Microsoft](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) para obter detalhes.
 
 Este exercício deve levar aproximadamente **30** minutos para ser concluído.
 
 > **Observação**: algumas das tecnologias usadas neste exercício estão em versão prévia ou em desenvolvimento ativo. Você pode observar algum comportamento, avisos ou erros inesperados.
 
-## Criar um projeto da Fábrica de IA do Azure
+## Criar um projeto da Fábrica
 
-Vamos começar criando um projeto da Fábrica de IA do Azure.
+Vamos começar criando um projeto da Fábrica.
 
-1. Em um navegador da Web, abra o [Portal da Fábrica de IA do Azure](https://ai.azure.com) em `https://ai.azure.com` e entre usando suas credenciais do Azure. Feche todas as dicas ou painéis de início rápido abertos na primeira vez que você entrar e, se necessário, use o logotipo da **Fábrica de IA do Azure** no canto superior esquerdo para navegar até a home page, que é semelhante à imagem a seguir (feche o painel **Ajuda** se estiver aberto):
+1. Em um navegador da Web, abra o [portal da Fábrica](https://ai.azure.com) em `https://ai.azure.com` e entre usando suas credenciais do Azure. Feche todas as dicas ou painéis de início rápido abertos na primeira vez que você entrar e, se necessário, use o logotipo da **Fábrica** no canto superior esquerdo para navegar até a home page, que é semelhante à imagem a seguir (feche o painel **Ajuda** se estiver aberto):
 
-    ![Captura de tela do portal do Azure AI Foundry.](./Media/ai-foundry-home.png)
+    ![Captura de tela do portal da Fábrica.](./Media/ai-foundry-home.png)
+
+    > **Importante**: Verifique se a alternância **Nova Fábrica** está *desativada* para este laboratório.
 
 1. Na home page, clique em **Criar um agente**.
 1. Quando solicitado a criar um projeto, insira um nome válido para o projeto e expanda **Opções avançadas**.
 1. Confirme as seguintes configurações do projeto:
-    - **Recurso da Fábrica de IA do Azure**: *um nome válido para o recurso da Fábrica de IA do Azure*
+    - **Recurso Fábrica**: *Um nome válido para o recurso Fábrica*
     - **Assinatura**: *sua assinatura do Azure*
     - **Grupo de recursos**: *criar ou selecionar um grupo de recursos*
     - **Região**: *selecione qualquer **AI Foundry recomendado***\*
@@ -41,9 +43,9 @@ Vamos começar criando um projeto da Fábrica de IA do Azure.
 
 1. No painel de navegação à esquerda, selecione **Visão geral** para ver a página principal do projeto, que será assim:
 
-    ![Captura de tela de uma página de visão geral do projeto da Fábrica de IA do Azure.](./Media/ai-foundry-project.png)
+    ![Captura de tela de uma página de visão geral do projeto da Fábrica.](./Media/ai-foundry-project.png)
 
-1. Copie os valores do **ponto de extremidade do projeto da Fábrica de IA do Azure** para um bloco de notas, pois você os usará para se conectar ao seu projeto em um aplicativo cliente.
+1. Copie os valores do **ponto de extremidade do projeto da Fábrica** para um bloco de notas, pois você os usará para se conectar ao seu projeto em um aplicativo cliente.
 
 ## Criar um aplicativo cliente do agente
 
@@ -51,7 +53,7 @@ Agora você está pronto para criar um aplicativo cliente que usa um agente. Alg
 
 ### Clonar o repositório que contém o código do aplicativo
 
-1. Abra uma nova guia do navegador (mantendo o portal da Fábrica de IA do Azure aberto na guia existente). Em seguida, na nova guia, navegue até o [portal do Azure](https://portal.azure.com) em `https://portal.azure.com`; efetue login com suas credenciais do Azure, se solicitado.
+1. Abra uma nova guia do navegador (mantendo o portal da Fábrica aberto na guia existente). Em seguida, na nova guia, navegue até o [portal do Azure](https://portal.azure.com) em `https://portal.azure.com`; efetue login com suas credenciais do Azure, se solicitado.
 
     Feche todas as notificações de boas-vindas para ver a home page do portal do Azure.
 
@@ -101,7 +103,7 @@ Agora você está pronto para criar um aplicativo cliente que usa um agente. Alg
 
     O arquivo é aberto em um editor de código.
 
-1. No arquivo de código, substitua o espaço reservado **your_project_endpoint** pelo ponto de extremidade do seu projeto (copiado da página **Visão geral** do projeto no portal da Fábrica de IA do Azure) e verifique se a variável MODEL_DEPLOYMENT_NAME está definida com o nome da implantação do seu modelo (que deve ser *gpt-4o*).
+1. No arquivo de código, substitua o espaço reservado **your_project_endpoint** pelo ponto de extremidade do seu projeto (copiado da página **Visão geral** do projeto no portal da Fábrica) e verifique se a variável MODEL_DEPLOYMENT_NAME está definida com o nome da implantação do seu modelo (que deve ser *gpt-4o*).
 1. Depois de substituir o espaço reservado, use o comando **CTRL+S** para salvar suas alterações e, em seguida, use o comando **CTRL+Q** para fechar o editor de código, mantendo a linha de comando do Cloud Shell aberta.
 
 ### Escrever código para um aplicativo de agente
@@ -139,7 +141,7 @@ Agora você está pronto para criar um aplicativo cliente que usa um agente. Alg
    with agent_client:
     ```
 
-    O código se conecta ao projeto da Fábrica de IA do Azure usando as credenciais atuais do Azure. A instrução final *with agent_client* inicia um bloco de código que define o escopo do cliente, garantindo que ele seja limpo quando o código dentro do bloco for concluído.
+    O código se conecta ao projeto da Fábrica usando as credenciais atuais do Azure. A instrução final *with agent_client* inicia um bloco de código que define o escopo do cliente, garantindo que ele seja limpo quando o código dentro do bloco for concluído.
 
 1. Localize o comentário **Upload the data file and create a CodeInterpreterTool** dentro do bloco *with project_client* e adicione o seguinte código para fazer upload do arquivo de dados no projeto e criar uma CodeInterpreterTool que possa acessar os dados nele:
 
@@ -252,7 +254,7 @@ Agora você está pronto para criar um aplicativo cliente que usa um agente. Alg
 
     > **Observação**: na maioria dos cenários, apenas usar *az login* será suficiente. No entanto, se você tiver assinaturas em vários locatários, talvez seja necessário especificar o locatário usando o parâmetro *--tenant* . Consulte [Entrar no Azure interativamente usando a CLI do Azure](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) para obter detalhes.
     
-1. Quando solicitado, siga as instruções para abrir a página de entrada em uma nova guia e insira o código de autenticação fornecido e suas credenciais do Azure. Em seguida, conclua o processo de entrada na linha de comando, selecionando a assinatura que contém o hub da Fábrica de IA do Azure, se solicitado.
+1. Quando solicitado, siga as instruções para abrir a página de entrada em uma nova guia e insira o código de autenticação fornecido e suas credenciais do Azure. Em seguida, conclua o processo de entrada na linha de comando, selecionando a assinatura que contém o hub da Fábrica, se solicitado.
 1. Depois de entrar, insira o seguinte comando para executar o aplicativo:
 
     ```

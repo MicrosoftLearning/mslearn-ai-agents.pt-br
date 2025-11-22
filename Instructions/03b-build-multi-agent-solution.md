@@ -1,31 +1,33 @@
 ---
 lab:
-  title: Desenvolver uma solução multiagente com a Fábrica de IA do Azure
-  description: Saiba como configurar vários agentes para colaborar usando o Serviço de Agente da Fábrica de IA do Azure
+  title: Desenvolver uma solução de vários agentes com a Fábrica da Microsoft
+  description: Saiba como configurar vários agentes para colaborar usando o Serviço de Agente da Fábrica da Microsoft
 ---
 
 # Desenvolva uma solução multiagente
 
-Neste exercício, você criará um projeto que orquestra vários agentes de IA usando o Serviço de Agente da Fábrica de IA do Azure. Você criará uma solução de IA que ajuda na triagem de tíquetes. Os agentes conectados irão avaliar a prioridade do tíquete, sugerir uma equipe para atribuição e determinar o nível de esforço necessário para concluir o tíquete. Vamos começar!
+Neste exercício, você irá criar um projeto que orquestra vários agentes de IA usando o Serviço de Agente da Fábrica da Microsoft. Você criará uma solução de IA que ajuda na triagem de tíquetes. Os agentes conectados irão avaliar a prioridade do tíquete, sugerir uma equipe para atribuição e determinar o nível de esforço necessário para concluir o tíquete. Vamos começar!
 
-> **Dica**: O código usado neste exercício é baseado no SDK para Python da Fábrica de IA do Azure. Você pode desenvolver soluções semelhantes usando os SDKs para Microsoft .NET, JavaScript e Java. Consulte as [bibliotecas de clientes do SDK da Fábrica de IA do Azure](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) para obter mais detalhes.
+> **Dica**: O código usado neste exercício é baseado no SDK para Python da Fábrica. Você pode desenvolver soluções semelhantes usando os SDKs para Microsoft .NET, JavaScript e Java. Consulte as [bibliotecas de clientes do SDK da Fábrica](https://learn.microsoft.com/azure/ai-foundry/how-to/develop/sdk-overview) para obter mais detalhes.
 
 Este exercício deve levar aproximadamente **30** minutos para ser concluído.
 
 > **Observação**: algumas das tecnologias usadas neste exercício estão em versão prévia ou em desenvolvimento ativo. Você pode observar algum comportamento, avisos ou erros inesperados.
 
-## Criar um projeto da Fábrica de IA do Azure
+## Criar um projeto da Fábrica
 
-Vamos começar criando um projeto da Fábrica de IA do Azure.
+Vamos começar criando um projeto da Fábrica.
 
-1. Em um navegador da Web, abra o [Portal da Fábrica de IA do Azure](https://ai.azure.com) em `https://ai.azure.com` e entre usando suas credenciais do Azure. Feche todas as dicas ou painéis de início rápido abertos na primeira vez que você entrar e, se necessário, use o logotipo da **Fábrica de IA do Azure** no canto superior esquerdo para navegar até a home page, que é semelhante à imagem a seguir (feche o painel **Ajuda** se estiver aberto):
+1. Em um navegador da Web, abra o [portal da Fábrica](https://ai.azure.com) em `https://ai.azure.com` e entre usando suas credenciais do Azure. Feche todas as dicas ou painéis de início rápido abertos na primeira vez que você entrar e, se necessário, use o logotipo da **Fábrica** no canto superior esquerdo para navegar até a home page, que é semelhante à imagem a seguir (feche o painel **Ajuda** se estiver aberto):
 
-    ![Captura de tela do portal do Azure AI Foundry.](./Media/ai-foundry-home.png)
+    ![Captura de tela do portal da Fábrica.](./Media/ai-foundry-home.png)
+
+    > **Importante**: Verifique se a alternância **Nova Fábrica** está *desativada* para este laboratório.
 
 1. Na home page, clique em **Criar um agente**.
 1. Quando solicitado a criar um projeto, insira um nome válido para o projeto e expanda **Opções avançadas**.
 1. Confirme as seguintes configurações do projeto:
-    - **Recurso da Fábrica de IA do Azure**: *um nome válido para o recurso da Fábrica de IA do Azure*
+    - **Recurso Fábrica**: *Um nome válido para o recurso Fábrica*
     - **Assinatura**: *sua assinatura do Azure*
     - **Grupo de recursos**: *criar ou selecionar um grupo de recursos*
     - **Região**: *selecione qualquer **AI Foundry recomendado***\*
@@ -41,9 +43,9 @@ Vamos começar criando um projeto da Fábrica de IA do Azure.
 
 1. No painel de navegação à esquerda, selecione **Visão geral** para ver a página principal do projeto, que será assim:
 
-    ![Captura de tela de uma página de visão geral do projeto da Fábrica de IA do Azure.](./Media/ai-foundry-project.png)
+    ![Captura de tela de uma página de visão geral do projeto da Fábrica.](./Media/ai-foundry-project.png)
 
-1. Copie os valores do **ponto de extremidade do projeto da Fábrica de IA do Azure** para um bloco de notas, pois você os usará para se conectar ao seu projeto em um aplicativo cliente.
+1. Copie os valores do **ponto de extremidade do projeto da Fábrica** para um bloco de notas, pois você os usará para se conectar ao seu projeto em um aplicativo cliente.
 
 ## Criar um aplicativo cliente do Agente de IA
 
@@ -51,7 +53,7 @@ Agora você está pronto para criar um aplicativo cliente que define os agentes 
 
 ### Preparar o ambiente
 
-1. Abra uma nova guia do navegador (mantendo o portal da Fábrica de IA do Azure aberto na guia existente). Em seguida, na nova guia, navegue até o [portal do Azure](https://portal.azure.com) em `https://portal.azure.com`; efetue login com suas credenciais do Azure, se solicitado.
+1. Abra uma nova guia do navegador (mantendo o portal da Fábrica aberto na guia existente). Em seguida, na nova guia, navegue até o [portal do Azure](https://portal.azure.com) em `https://portal.azure.com`; efetue login com suas credenciais do Azure, se solicitado.
 
     Feche todas as notificações de boas-vindas para ver a home page do portal do Azure.
 
@@ -101,7 +103,7 @@ Agora você está pronto para criar um aplicativo cliente que define os agentes 
 
     O arquivo é aberto em um editor de código.
 
-1. No arquivo de código, substitua o espaço reservado **your_project_endpoint** pelo ponto de extremidade do projeto (copiado da página **Visão Geral** do projeto no portal da Fábrica de IA do Azure) e o espaço reservado **your_model_deployment** pelo nome que você atribuiu à implantação do modelo gpt-4o (que por padrão é `gpt-4o`).
+1. No arquivo de código, substitua o espaço reservado **your_project_endpoint** pelo ponto de extremidade do projeto (copiado da página **Visão Geral** do projeto no portal da Fábrica) e o espaço reservado **your_model_deployment** pelo nome que você atribuiu à implantação do modelo gpt-4o (que por padrão é `gpt-4o`).
 
 1. Depois de substituir os espaços reservados, use o comando **CTRL+S** para salvar suas alterações e, em seguida, use o comando **CTRL+Q** para fechar o editor de código, mantendo a linha de comando do Cloud Shell aberta.
 
@@ -331,7 +333,7 @@ Agora você está pronto para executar seu código e ver seus agentes de IA cola
 
     > **Observação**: na maioria dos cenários, apenas usar *az login* será suficiente. No entanto, se você tiver assinaturas em vários locatários, talvez seja necessário especificar o locatário usando o parâmetro *--tenant* . Consulte [Entrar no Azure interativamente usando a CLI do Azure](https://learn.microsoft.com/cli/azure/authenticate-azure-cli-interactively) para obter detalhes.
 
-1. Quando solicitado, siga as instruções para abrir a página de entrada em uma nova guia e insira o código de autenticação fornecido e suas credenciais do Azure. Em seguida, conclua o processo de entrada na linha de comando, selecionando a assinatura que contém o hub da Fábrica de IA do Azure, se solicitado.
+1. Quando solicitado, siga as instruções para abrir a página de entrada em uma nova guia e insira o código de autenticação fornecido e suas credenciais do Azure. Em seguida, conclua o processo de entrada na linha de comando, selecionando a assinatura que contém o hub da Fábrica, se solicitado.
 
 1. Depois de entrar, insira o seguinte comando para executar o aplicativo:
 

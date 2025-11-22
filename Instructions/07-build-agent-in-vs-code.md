@@ -1,12 +1,12 @@
 ---
 lab:
   title: Desenvolver um agente de IA com a extensão do VS Code
-  description: Use a extensão do VS Code da Fábrica de IA do Azure para criar um agente de IA.
+  description: Use a extensão do VS Code da Fábrica da Microsoft para criar um agente de IA.
 ---
 
 # Desenvolver um agente de IA com a extensão do VS Code
 
-Neste exercício, você usará a extensão do VS Code da Fábrica de IA do Azure para criar um agente que pode usar ferramentas de servidor MCP (Protocolo de Contexto de Modelo) para acessar as APIs e fontes de dados externas. O agente poderá recuperar informações atualizadas e interagir com vários serviços por meio de ferramentas MCP.
+Neste exercício, você usará a extensão do VS Code da Fábrica da Microsoft para criar um agente que pode usar ferramentas de servidor MCP (Protocolo de Contexto de Modelo) para acessar as APIs e fontes de dados externas. O agente poderá recuperar informações atualizadas e interagir com vários serviços por meio de ferramentas MCP.
 
 Este exercício deve levar aproximadamente **30** minutos para ser concluído.
 
@@ -18,7 +18,7 @@ Antes de iniciar este exercício, certifique-se de ter:
 - O Visual Studio Code instalado
 - Uma assinatura ativa do Azure
 
-## Instalar a extensão do VS Code da Fábrica de IA do Azure
+## Instalar a extensão do VS Code da Fábrica
 
 Vamos começar instalando e configurando a extensão do VS Code.
 
@@ -26,9 +26,9 @@ Vamos começar instalando e configurando a extensão do VS Code.
 
 1. Selecione **Extensões** no painel esquerdo (ou pressione **Ctrl+Shift+X**).
 
-1. Na barra de pesquisa, digite **Fábrica de IA do Azure** e pressione Enter.
+1. Na barra de pesquisa, digite **Fábrica** e pressione Enter.
 
-1. Selecione a extensão **Fábrica de IA do Azure** da Microsoft e clique em **Instalar**.
+1. Selecione a extensão **Fábrica** da Microsoft e clique em **Instalar**.
 
 1. Após a conclusão da instalação, verifique se a extensão aparece na barra de navegação primária no lado esquerdo do Visual Studio Code.
 
@@ -36,13 +36,13 @@ Vamos começar instalando e configurando a extensão do VS Code.
 
 Agora você se conectará aos recursos do Azure e criará um novo projeto da Fábrica de IA.
 
-1. Na barra lateral do VS Code, selecione o ícone de extensão da **Fábrica de IA do Azure**.
+1. Na barra lateral do VS Code, selecione o ícone da extensão da **Fábrica**.
 
 1. No modo de exibição recursos do Azure, selecione **Entrar no Azure...** e siga os prompts de autenticação.
 
 1. Depois de entrar, selecione a assinatura do Azure na lista suspensa.
 
-1. Crie um novo projeto da Fábrica de IA do Azure selecionando o ícone **+** (mais) ao lado de **Recursos** no modo de exibição Extensão da Fábrica de IA do Azure.
+1. Crie um novo projeto da Fábrica selecionando o ícone **+** (sinal de adição) ao lado de **Recursos** no modo de exibição Extensão da Fábrica.
 
 1. Escolha se deseja criar um novo grupo de recursos ou usar um já existente:
    
@@ -54,7 +54,7 @@ Agora você se conectará aos recursos do Azure e criará um novo projeto da Fá
    **Para usar um grupo de recursos existente:**
    - Selecione o grupo de recursos que você deseja usar na lista e pressione Enter
 
-1. Insira um nome para o projeto da Fábrica de IA do Azure (por exemplo, "ai-agents-project") na caixa de texto e pressione Enter.
+1. Insira um nome para o projeto da Fábrica (por exemplo, "ai-agents-project") na caixa de texto e pressione Enter.
 
 1. Aguarde até que a implantação do projeto seja concluída. Um pop-up será exibido com a mensagem "Projeto implantado com êxito".
 
@@ -64,11 +64,11 @@ Você precisará de um modelo implantado para usar com seu agente.
 
 1. Quando o pop-up "Projeto implantado com êxito" for exibido, selecione o botão **Implantar um modelo**. Isso abre o Catálogo de modelos.
 
-   > **Dica**: Você também pode acessar o Catálogo de modelos selecionando o ícone **+** ao lado de **Modelos** na seção Recursos ou pressionando **F1** e executando o comando **Fábrica de IA do Azure: Abra o Catálogo de modelos**.
+   > **Dica**: Você também pode acessar o Catálogo de modelos selecionando o ícone **+** ao lado de **Modelos** na seção Recursos ou pressionando **F1** e executando o comando **Fábrica: Abra o Catálogo de modelos**.
 
 1. No Catálogo de modelos, localize o modelo **gpt-4o** (você pode usar a barra de pesquisa para encontrá-lo rapidamente).
 
-    ![Captura de tela do Catálogo de modelos na extensão do VS Code da Fábrica de IA do Azure.](Media/vs-code-model.png)
+    ![Captura de tela do Catálogo de Modelos na extensão da Fábrica no VS Code.](Media/vs-code-model.png)
 
 1. Selecione **Implantar no Azure** ao lado do modelo gpt-4o.
 
@@ -78,7 +78,7 @@ Você precisará de um modelo implantado para usar com seu agente.
    - **Versão do modelo**: Deixar o padrão
    - **Tokens por minuto**: Deixar o padrão
 
-1. Selecione **Implantar na Fábrica de IA do Azure** no canto inferior esquerdo.
+1. Selecione **Implantar na Fábrica** no canto inferior esquerdo.
 
 1. Na caixa de diálogo de confirmação, selecione **Implantar** para implantar o modelo.
 
@@ -88,11 +88,11 @@ Você precisará de um modelo implantado para usar com seu agente.
 
 Agora você criará um agente de IA usando a interface do designer visual.
 
-1. No modo de exibição de extensão da Fábrica de IA do Azure, localize a seção **Recursos**.
+1. No modo de exibição Extensão da Fábrica, localize a seção **Recursos**.
 
 1. Selecione o ícone **+** (mais) ao lado da subseção **Agents** para criar um novo Agente de IA.
 
-    ![Captura de tela de uma criação de um agente na extensão do VS Code da Fábrica de IA do Azure.](Media/vs-code-new-agent.png)
+    ![Captura de tela da criação de um agente na extensão da Fábrica no VS Code.](Media/vs-code-new-agent.png)
 
 1. Escolha um local para salvar os arquivos do agente quando solicitado.
 
@@ -117,7 +117,7 @@ Agora você adicionará uma ferramenta de servidor MCP (Protocolo de Contexto de
 
 1. Na seção **FERRAMENTA** do designer, selecione o botão **Adicionar ferramenta** no canto superior direito.
 
-![Captura de tela da adição de uma ferramenta a um agente na extensão do VS Code da Fábrica de IA do Azure.](Media/vs-code-agent-tools.png)
+![Captura de tela da adição de uma ferramenta a um agente na extensão da Fábrica no VS Code.](Media/vs-code-agent-tools.png)
 
 1. No menu suspenso, escolha **Servidor MCP**.
 
@@ -129,9 +129,9 @@ Agora você adicionará uma ferramenta de servidor MCP (Protocolo de Contexto de
 
 1. Selecione o botão **Criar ferramenta** para adicionar a ferramenta ao agente.
 
-## Implantar seu agente na Fábrica de IA do Azure
+## Implantar seu agente na Fábrica
 
-1. No modo de exibição do designer, selecione o botão **Criar na Fábrica de IA do Azure** no canto inferior esquerdo.
+1. No modo de exibição de designer, selecione o botão **Criar na Fábrica** no canto inferior esquerdo.
 
 1. Aguarde até que a implantação seja concluída.
 
@@ -186,15 +186,15 @@ Você pode usar esse código como ponto de partida para a criação de aplicativ
 
 ## Resumo
 
-Neste exercício, você usou a extensão VS Code da Fábrica de IA do Azure para criar um agente de IA com ferramentas do servidor MCP. O agente pode acessar fontes de dados externas e APIs por meio do Protocolo de Contexto de Modelo, permitindo que ele forneça informações atualizadas e interaja com vários serviços. Você também aprendeu a testar o agente no playground e gerar um código de exemplo para interação programática.
+Neste exercício, você usou a extensão da Fábrica no VS Code para criar um agente de IA com ferramentas do servidor MCP. O agente pode acessar fontes de dados externas e APIs por meio do Protocolo de Contexto de Modelo, permitindo que ele forneça informações atualizadas e interaja com vários serviços. Você também aprendeu a testar o agente no playground e gerar um código de exemplo para interação programática.
 
 ## Limpar
 
-Quando terminar de explorar a extensão do VS Code da Fábrica de IA do Azure, você deverá limpar os recursos para evitar incorrer em custos desnecessários do Azure.
+Quando terminar de explorar a extensão da Fábrica no VS Code, você deverá limpar os recursos para evitar incorrer em custos desnecessários do Azure.
 
 ### Excluir seus agentes
 
-1. No Portal da Fábrica de IA do Azure, selecione **Agentes** no menu de navegação.
+1. No portal da Fábrica, selecione **Agentes** no menu de navegação.
 
 1. Selecione seu agente e, em seguida, selecione o botão **Excluir**.
 

@@ -1,29 +1,31 @@
 ---
 lab:
   title: Explore o desenvolvimento do agente de I
-  description: Dê os primeiros passos no desenvolvimento de agentes de IA explorando o Serviço de Agente de IA do Azure no Portal da Fábrica de IA do Azure.
+  description: Dê os primeiros passos no desenvolvimento de agentes de IA explorando o Serviço de Agente de IA do Azure no Portal da Fábrica da Microsoft.
 ---
 
 # Explore o desenvolvimento do Agente de IA
 
-Neste exercício, você usará o Serviço de Agente de IA do Azure no Portal da Fábrica de IA do Azure para criar um agente de IA simples que auxilia os funcionários em solicitações de despesas.
+Neste exercício, você usará o Serviço de Agente de IA do Azure no Portal da Fábrica da Microsoft para criar um agente de IA simples que auxilia os funcionários em solicitações de despesas.
 
 Este exercício levará aproximadamente **30** minutos.
 
 > **Observação**: algumas das tecnologias usadas neste exercício estão em versão prévia ou em desenvolvimento ativo. Você pode observar algum comportamento, avisos ou erros inesperados.
 
-## Criar um projeto e um agente da Fábrica de IA do Azure
+## Criar um projeto e um agente da Fábrica
 
-Vamos começar criando um projeto da Fábrica de IA do Azure.
+Vamos começar criando um projeto da Fábrica.
 
-1. Em um navegador da Web, abra o [Portal da Fábrica de IA do Azure](https://ai.azure.com) em `https://ai.azure.com` e entre usando suas credenciais do Azure. Feche todas as dicas ou painéis de início rápido abertos na primeira vez que você entrar e, se necessário, use o logotipo da **Fábrica de IA do Azure** no canto superior esquerdo para navegar até a home page, que é semelhante à imagem a seguir (feche o painel **Ajuda** se estiver aberto):
+1. Em um navegador da Web, abra o [portal da Fábrica](https://ai.azure.com) em `https://ai.azure.com` e entre usando suas credenciais do Azure. Feche todas as dicas ou painéis de início rápido abertos na primeira vez que você entrar e, se necessário, use o logotipo da **Fábrica** no canto superior esquerdo para navegar até a home page, que é semelhante à imagem a seguir (feche o painel **Ajuda** se estiver aberto):
 
-    ![Captura de tela do portal do Azure AI Foundry.](./Media/ai-foundry-home.png)
+    ![Captura de tela do portal da Fábrica.](./Media/ai-foundry-home.png)
+
+    > **Importante**: Verifique se a alternância **Nova Fábrica** está *desativada* para este laboratório.
 
 1. Na home page, clique em **Criar um agente**.
 1. Quando solicitado a criar um projeto, insira um nome válido para o projeto.
 1. Expanda **Opções avançadas** e especifique as seguintes configurações:
-    - **Recurso da Fábrica de IA do Azure**: *um nome válido para o recurso da Fábrica de IA do Azure*
+    - **Recurso Fábrica**: *Um nome válido para o recurso Fábrica*
     - **Assinatura**: *sua assinatura do Azure*
     - **Resource group**: *selecione o grupo de recursos ou crie um novo*
     - **Região**: *selecione qualquer **AI Foundry recomendado***\**
@@ -37,7 +39,7 @@ Vamos começar criando um projeto da Fábrica de IA do Azure.
 
 1. Quando o projeto for criado, o playground Agentes abrirá automaticamente para que você possa selecionar um implantar um modelo:
 
-    ![Captura de tela do playground Agentes de um projeto da Fábrica de IA do Azure](./Media/ai-foundry-agents-playground.png)
+    ![Captura de tela do playground Agentes de um projeto da Fábrica.](./Media/ai-foundry-agents-playground.png)
 
     >**Observação**: um modelo base GPT-4o é implantado automaticamente ao criar o agente e o projeto.
 
@@ -57,7 +59,7 @@ Agora que você tem um modelo implantado, está pronto para criar um agente de I
    If a user wants to submit an expense claim, you get their email address, a description of the claim, and the amount to be claimed and write the claim details to a text file that the user can download.
     ```
 
-    ![Captura de tela da página de configuração do agente de IA no Portal da Fábrica de IA do Azure.](./Media/ai-agent-setup.png)
+    ![Captura de tela da página de configuração do agente de IA no Portal da Fábrica.](./Media/ai-agent-setup.png)
 
 1. Mais abaixo no painel **Configuração** , ao lado do cabeçalho **Conhecimento**, selecione **+ Adicionar**. Em seguida, na caixa de diálogo **Adicionar conhecimento** , selecione **Arquivos**.
 1. Na caixa de diálogo **Adicionando arquivos**, crie um novo repositório vetorial chamado `Expenses_Vector_Store`, carregando e salvando o **arquivo local Expenses_policy.docx** que você baixou anteriormente.
@@ -79,7 +81,7 @@ Agora que você criou um agente, pode testá-lo no playground Chat.
 1. Envie um prompt que descreva a declaração e o valor; por exemplo, `Breakfast cost me $20`.
 1. O agente usará o intérprete de código para preparar o arquivo de texto do relatório de despesas e fornecer um link para que você possa baixá-lo.
 
-    ![Captura de tela do playground no Portal da Fábrica de IA do Azure.](./Media/ai-agent-playground.png)
+    ![Captura de tela do playground no Portal da Fábrica.](./Media/ai-agent-playground.png)
 
 1. Baixe e abra o documento de texto para ver os detalhes da declaração de despesas.
 
